@@ -430,6 +430,29 @@ func TestTranslate(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("T should be alias for Translate", func(t *testing.T) {
+		i18n := NewI18n(Config{})
+
+		i18n.AddLanguage("en", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Welcome",
+			},
+		})
+
+		got := i18n.Translate("en", "welcome", TranslateOptions{})
+		gotT := i18n.T("en", "welcome", TranslateOptions{})
+		expected := "Welcome"
+
+		if got != expected {
+			t.Errorf("expected %s; got %s", expected, got)
+		}
+
+		if gotT != expected {
+			t.Errorf("expected %s; got %s", expected, gotT)
+		}
+	})
 }
 
 // Function to create pointer to a value

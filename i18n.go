@@ -161,3 +161,8 @@ func (t *i18n) Translate(languageName string, translateKey string, options Trans
 
 	return translation
 }
+
+// T is a shortcut for Translate
+func (t *i18n) T(languageName string, translateKey string, options TranslateOptions) string {
+	return t.Translate(languageName, translateKey, options)
+}
