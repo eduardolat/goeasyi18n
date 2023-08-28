@@ -1,6 +1,9 @@
 package goeasyi18n
 
 import (
+	"bytes"
+	"fmt"
+	"html/template"
 	"testing"
 )
 
@@ -53,15 +56,15 @@ func TestTranslate(t *testing.T) {
 			expected string
 		}{
 			{"en", "welcome", TranslateOptions{}, "Welcome"},
-			{"en", "welcome", TranslateOptions{Gender: CreatePtr("male")}, "Welcome, sir"},
-			{"en", "welcome", TranslateOptions{Gender: CreatePtr("female")}, "Welcome, ma'am"},
-			{"en", "emails", TranslateOptions{Count: CreatePtr(1)}, "You have one email"},
-			{"en", "emails", TranslateOptions{Count: CreatePtr(5)}, "You have many emails"},
+			{"en", "welcome", TranslateOptions{Gender: createPtr("male")}, "Welcome, sir"},
+			{"en", "welcome", TranslateOptions{Gender: createPtr("female")}, "Welcome, ma'am"},
+			{"en", "emails", TranslateOptions{Count: createPtr(1)}, "You have one email"},
+			{"en", "emails", TranslateOptions{Count: createPtr(5)}, "You have many emails"},
 			{"es", "welcome", TranslateOptions{}, "Bienvenido"},
-			{"es", "welcome", TranslateOptions{Gender: CreatePtr("Male")}, "Bienvenido, señor"},
-			{"es", "welcome", TranslateOptions{Gender: CreatePtr("Female")}, "Bienvenida, señora"},
-			{"es", "emails", TranslateOptions{Count: CreatePtr(1)}, "Tienes un correo"},
-			{"es", "emails", TranslateOptions{Count: CreatePtr(5)}, "Tienes muchos correos"},
+			{"es", "welcome", TranslateOptions{Gender: createPtr("Male")}, "Bienvenido, señor"},
+			{"es", "welcome", TranslateOptions{Gender: createPtr("Female")}, "Bienvenida, señora"},
+			{"es", "emails", TranslateOptions{Count: createPtr(1)}, "Tienes un correo"},
+			{"es", "emails", TranslateOptions{Count: createPtr(5)}, "Tienes muchos correos"},
 			// Test fallback language
 			{"xxx", "welcome", TranslateOptions{}, "Welcome"},
 			// Test fallback key
@@ -150,9 +153,9 @@ func TestTranslate(t *testing.T) {
 			expected string
 		}{
 			{"en", "print_emails", TranslateOptions{}, "You have emails"},
-			{"en", "print_emails", TranslateOptions{Count: CreatePtr(0), Data: Data{"EmailQty": 0}}, "You have 0 emails"},
-			{"en", "print_emails", TranslateOptions{Count: CreatePtr(1), Data: Data{"EmailQty": 1}}, "You have one email"},
-			{"en", "print_emails", TranslateOptions{Count: CreatePtr(5), Data: Data{"EmailQty": 5}}, "You have 5 emails"},
+			{"en", "print_emails", TranslateOptions{Count: createPtr(0), Data: Data{"EmailQty": 0}}, "You have 0 emails"},
+			{"en", "print_emails", TranslateOptions{Count: createPtr(1), Data: Data{"EmailQty": 1}}, "You have one email"},
+			{"en", "print_emails", TranslateOptions{Count: createPtr(5), Data: Data{"EmailQty": 5}}, "You have 5 emails"},
 		}
 
 		for _, test := range tests {
@@ -205,11 +208,11 @@ func TestTranslate(t *testing.T) {
 			expected string
 		}{
 			{"en", "print_emails", TranslateOptions{}, "You have emails"},
-			{"en", "print_emails", TranslateOptions{Count: CreatePtr(0), Data: Data{"EmailQty": 0}}, "You have no emails"},
-			{"en", "print_emails", TranslateOptions{Count: CreatePtr(1), Data: Data{"EmailQty": 1}}, "You have one email"},
-			{"en", "print_emails", TranslateOptions{Count: CreatePtr(2), Data: Data{"EmailQty": 2}}, "You have two emails"},
-			{"en", "print_emails", TranslateOptions{Count: CreatePtr(3), Data: Data{"EmailQty": 3}}, "You have three emails"},
-			{"en", "print_emails", TranslateOptions{Count: CreatePtr(100), Data: Data{"EmailQty": 100}}, "You have 100 emails"},
+			{"en", "print_emails", TranslateOptions{Count: createPtr(0), Data: Data{"EmailQty": 0}}, "You have no emails"},
+			{"en", "print_emails", TranslateOptions{Count: createPtr(1), Data: Data{"EmailQty": 1}}, "You have one email"},
+			{"en", "print_emails", TranslateOptions{Count: createPtr(2), Data: Data{"EmailQty": 2}}, "You have two emails"},
+			{"en", "print_emails", TranslateOptions{Count: createPtr(3), Data: Data{"EmailQty": 3}}, "You have three emails"},
+			{"en", "print_emails", TranslateOptions{Count: createPtr(100), Data: Data{"EmailQty": 100}}, "You have 100 emails"},
 		}
 
 		for _, test := range tests {
@@ -252,17 +255,17 @@ func TestTranslate(t *testing.T) {
 			expected string
 		}{
 			{"en", "hello_message", TranslateOptions{}, "Hello"},
-			{"en", "hello_message", TranslateOptions{Gender: CreatePtr("somethingelse")}, "Hello"},
-			{"en", "hello_message", TranslateOptions{Gender: CreatePtr("male")}, "Hello sir"},
-			{"en", "hello_message", TranslateOptions{Gender: CreatePtr("female")}, "Hello ma'am"},
-			{"en", "hello_message", TranslateOptions{Gender: CreatePtr("nonbinary")}, "Hello friend"},
-			{"en", "hello_message", TranslateOptions{Gender: CreatePtr("non-binary")}, "Hello friend"},
+			{"en", "hello_message", TranslateOptions{Gender: createPtr("somethingelse")}, "Hello"},
+			{"en", "hello_message", TranslateOptions{Gender: createPtr("male")}, "Hello sir"},
+			{"en", "hello_message", TranslateOptions{Gender: createPtr("female")}, "Hello ma'am"},
+			{"en", "hello_message", TranslateOptions{Gender: createPtr("nonbinary")}, "Hello friend"},
+			{"en", "hello_message", TranslateOptions{Gender: createPtr("non-binary")}, "Hello friend"},
 			{"es", "hello_message", TranslateOptions{}, "Hola"},
-			{"es", "hello_message", TranslateOptions{Gender: CreatePtr("somethingelse")}, "Hola"},
-			{"es", "hello_message", TranslateOptions{Gender: CreatePtr("male")}, "Hola amigo"},
-			{"es", "hello_message", TranslateOptions{Gender: CreatePtr("female")}, "Hola amiga"},
-			{"es", "hello_message", TranslateOptions{Gender: CreatePtr("nonbinary")}, "Hola amigue"},
-			{"es", "hello_message", TranslateOptions{Gender: CreatePtr("non-binary")}, "Hola amigue"},
+			{"es", "hello_message", TranslateOptions{Gender: createPtr("somethingelse")}, "Hola"},
+			{"es", "hello_message", TranslateOptions{Gender: createPtr("male")}, "Hola amigo"},
+			{"es", "hello_message", TranslateOptions{Gender: createPtr("female")}, "Hola amiga"},
+			{"es", "hello_message", TranslateOptions{Gender: createPtr("nonbinary")}, "Hola amigue"},
+			{"es", "hello_message", TranslateOptions{Gender: createPtr("non-binary")}, "Hola amigue"},
 		}
 
 		for _, test := range tests {
@@ -348,37 +351,37 @@ func TestTranslate(t *testing.T) {
 			expected string
 		}{
 			{"en", "hello_emails", TranslateOptions{}, "Hello, you have emails"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(0)}, "Hello, you have no emails, sir"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(1)}, "Hello, you have one email, sir"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(2)}, "Hello, you have two emails, sir"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(3)}, "Hello, you have three emails, sir"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, sir"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(0)}, "Hello, you have no emails, ma'am"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(1)}, "Hello, you have one email, ma'am"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(2)}, "Hello, you have two emails, ma'am"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(3)}, "Hello, you have three emails, ma'am"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, ma'am"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(0)}, "Hello, you have no emails, friend"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(1)}, "Hello, you have one email, friend"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(2)}, "Hello, you have two emails, friend"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(3)}, "Hello, you have three emails, friend"},
-			{"en", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, friend"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(0)}, "Hello, you have no emails, sir"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(1)}, "Hello, you have one email, sir"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(2)}, "Hello, you have two emails, sir"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(3)}, "Hello, you have three emails, sir"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, sir"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(0)}, "Hello, you have no emails, ma'am"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(1)}, "Hello, you have one email, ma'am"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(2)}, "Hello, you have two emails, ma'am"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(3)}, "Hello, you have three emails, ma'am"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, ma'am"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(0)}, "Hello, you have no emails, friend"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(1)}, "Hello, you have one email, friend"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(2)}, "Hello, you have two emails, friend"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(3)}, "Hello, you have three emails, friend"},
+			{"en", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, friend"},
 			{"es", "hello_emails", TranslateOptions{}, "Hola, tienes correos"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(0)}, "Hola, no tienes correos, amigo"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(1)}, "Hola, tienes un correo, amigo"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(2)}, "Hola, tienes dos correos, amigo"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(3)}, "Hola, tienes tres correos, amigo"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("male"), Count: CreatePtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amigo"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(0)}, "Hola, no tienes correos, amiga"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(1)}, "Hola, tienes un correo, amiga"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(2)}, "Hola, tienes dos correos, amiga"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(3)}, "Hola, tienes tres correos, amiga"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("female"), Count: CreatePtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amiga"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(0)}, "Hola, no tienes correos, amigue"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(1)}, "Hola, tienes un correo, amigue"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(2)}, "Hola, tienes dos correos, amigue"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(3)}, "Hola, tienes tres correos, amigue"},
-			{"es", "hello_emails", TranslateOptions{Gender: CreatePtr("nonbinary"), Count: CreatePtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amigue"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(0)}, "Hola, no tienes correos, amigo"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(1)}, "Hola, tienes un correo, amigo"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(2)}, "Hola, tienes dos correos, amigo"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(3)}, "Hola, tienes tres correos, amigo"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("male"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amigo"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(0)}, "Hola, no tienes correos, amiga"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(1)}, "Hola, tienes un correo, amiga"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(2)}, "Hola, tienes dos correos, amiga"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(3)}, "Hola, tienes tres correos, amiga"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("female"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amiga"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(0)}, "Hola, no tienes correos, amigue"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(1)}, "Hola, tienes un correo, amigue"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(2)}, "Hola, tienes dos correos, amigue"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(3)}, "Hola, tienes tres correos, amigue"},
+			{"es", "hello_emails", TranslateOptions{Gender: createPtr("nonbinary"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amigue"},
 		}
 
 		for _, test := range tests {
@@ -453,9 +456,130 @@ func TestTranslate(t *testing.T) {
 			t.Errorf("expected %s; got %s", expected, gotT)
 		}
 	})
+
+	t.Run("test basic templating function", func(t *testing.T) {
+		i18n := NewI18n(Config{})
+
+		i18n.AddLanguage("en", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Welcome",
+			},
+		})
+
+		templateFunc := i18n.NewTemplatingTranslateFunc()
+
+		result := execI18nTemplate(templateFunc, `{{Translate "lang:en" "key:welcome"}}`)
+
+		if result != "Welcome" {
+			t.Errorf("expected %s; got %s", "Welcome", result)
+		}
+	})
+
+	t.Run("test templating function with multiple interpolations", func(t *testing.T) {
+		i18n := NewI18n(Config{})
+
+		i18n.AddLanguage("en", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Welcome {{.Name}} {{.SurName}}",
+			},
+		})
+
+		templateFunc := i18n.NewTemplatingTranslateFunc()
+
+		result := execI18nTemplate(templateFunc, `{{Translate "lang:en" "key:welcome" "Name:John" "SurName:Doe" }}`)
+		expected := "Welcome John Doe"
+
+		if result != expected {
+			t.Errorf("expected %s; got %s", expected, result)
+		}
+	})
+
+	t.Run("test complex templating function", func(t *testing.T) {
+		i18n := NewI18n(Config{})
+
+		i18n.AddLanguage("en", TranslateStrings{
+			TranslateString{
+				Key:        "welcome_emails",
+				Default:    "Welcome, you have emails",
+				One:        "Welcome, you have one email",
+				Many:       "Welcome, you have {{.EmailQty}} emails",
+				OneMale:    "Welcome, you have one email, sir",
+				ManyMale:   "Welcome, you have {{.EmailQty}} emails, sir",
+				OneFemale:  "Welcome, you have one email, madam",
+				ManyFemale: "Welcome, you have {{.EmailQty}} emails, madam",
+			},
+		})
+
+		i18n.AddLanguage("es", TranslateStrings{
+			TranslateString{
+				Key:        "welcome_emails",
+				Default:    "Bienvenido, tienes correos",
+				One:        "Bienvenido, tienes un correo",
+				Many:       "Bienvenido, tienes {{.EmailQty}} correos",
+				OneMale:    "Bienvenido, tienes un correo, amigo",
+				ManyMale:   "Bienvenido, tienes {{.EmailQty}} correos, amigo",
+				OneFemale:  "Bienvenida, tienes un correo, amiga",
+				ManyFemale: "Bienvenida, tienes {{.EmailQty}} correos, amiga",
+			},
+		})
+
+		templateFunc := i18n.NewTemplatingTranslateFunc()
+
+		tests := []struct {
+			templateText string
+			expected     string
+		}{
+			{`{{Translate "lang:en" "key:welcome_emails"}}`, "Welcome, you have emails"},
+			{`{{Translate "lang:en" "key:welcome_emails" "count:1"}}`, "Welcome, you have one email"},
+			{`{{Translate "lang:en" "key:welcome_emails" "count:5" "EmailQty:5"}}`, "Welcome, you have 5 emails"},
+			{`{{Translate "lang:en" "key:welcome_emails" "count:1" "gender:male"}}`, "Welcome, you have one email, sir"},
+			{`{{Translate "lang:en" "key:welcome_emails" "count:5" "gender:male" "EmailQty:5"}}`, "Welcome, you have 5 emails, sir"},
+			{`{{Translate "lang:en" "key:welcome_emails" "count:1" "gender:female"}}`, "Welcome, you have one email, madam"},
+			{`{{Translate "lang:en" "key:welcome_emails" "count:5" "gender:female" "EmailQty:5"}}`, "Welcome, you have 5 emails, madam"},
+			{`{{Translate "lang:es" "key:welcome_emails"}}`, "Bienvenido, tienes correos"},
+			{`{{Translate "lang:es" "key:welcome_emails" "count:1"}}`, "Bienvenido, tienes un correo"},
+			{`{{Translate "lang:es" "key:welcome_emails" "count:5" "EmailQty:5"}}`, "Bienvenido, tienes 5 correos"},
+			{`{{Translate "lang:es" "key:welcome_emails" "count:1" "gender:male"}}`, "Bienvenido, tienes un correo, amigo"},
+			{`{{Translate "lang:es" "key:welcome_emails" "count:5" "gender:male" "EmailQty:5"}}`, "Bienvenido, tienes 5 correos, amigo"},
+			{`{{Translate "lang:es" "key:welcome_emails" "count:1" "gender:female"}}`, "Bienvenida, tienes un correo, amiga"},
+			{`{{Translate "lang:es" "key:welcome_emails" "count:5" "gender:female" "EmailQty:5"}}`, "Bienvenida, tienes 5 correos, amiga"},
+		}
+
+		for i, test := range tests {
+			t.Run(fmt.Sprintf("complex template test - %v", i), func(t *testing.T) {
+				got := execI18nTemplate(templateFunc, test.templateText)
+				if got != test.expected {
+					t.Errorf("expected %s; got %s", test.expected, got)
+				}
+			})
+		}
+	})
 }
 
 // Function to create pointer to a value
-func CreatePtr[T string | int](s T) *T {
+func createPtr[T string | int](s T) *T {
 	return &s
+}
+
+// Function to create template and execute it
+func execI18nTemplate(fn func(...any) string, templateText string) string {
+	tmpl, err := template.New("main").Funcs(
+		template.FuncMap{
+			"Translate": fn,
+		},
+	).Parse(templateText)
+
+	if err != nil {
+		return fmt.Sprintf("Error parsing template: %v", err)
+	}
+
+	result := new(bytes.Buffer)
+	err = tmpl.Execute(result, nil)
+	if err != nil {
+		return fmt.Sprintf("Error executing template: %v", err)
+	}
+
+	return result.String()
 }

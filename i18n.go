@@ -2,6 +2,7 @@ package goeasyi18n
 
 import (
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -165,4 +166,81 @@ func (t *i18n) Translate(languageName string, translateKey string, options Trans
 // T is a shortcut for Translate
 func (t *i18n) T(languageName string, translateKey string, options TranslateOptions) string {
 	return t.Translate(languageName, translateKey, options)
+}
+
+/*
+NewTemplatingTranslateFunc creates a function that can be used in text/template and html/template.
+Just pass the created function to template.FuncMap.
+
+Example:
+
+tempTemplate := template.New("main").Funcs(
+
+	template.FuncMap{
+		// 👇 "Translate" could be just "T" (for simplicity) or any other name you want.
+		"Translate": i18n.NewTemplatingTranslateFunc(),
+	},
+
+)
+
+Then you can use it in your template like this:
+
+{{Translate "lang:en" "key:hello_emails" "gender:nonbinary" "count:100" "SomeData:Anything"}}
+
+Arguments:
+
+- "lang:en": Language code (e.g., "en", "es").
+- "key:hello_emails": Translation key.
+- "gender:nonbinary": Gender for the translation (optional).
+- "count:100": Count for pluralization (optional).
+- Additional key-value pairs will be added to the Data map.
+
+As you can imagine, lang, key, gender and count are reserved keys.
+You can use any other key you want to pass data to translation.
+
+Note: All arguments are strings. The function will attempt to convert "count" to an integer.
+*/
+func (t *i18n) NewTemplatingTranslateFunc() func(args ...any) string {
+	return func(args ...any) string {
+		var lang, key string
+		var gender *string
+		var count *int
+		data := make(Data)
+
+		for _, arg := range args {
+			strArg, ok := arg.(string)
+			if !ok {
+				continue
+			}
+
+			parts := strings.SplitN(strArg, ":", 2)
+			if len(parts) != 2 {
+				continue
+			}
+
+			switch parts[0] {
+			case "lang":
+				lang = parts[1]
+			case "key":
+				key = parts[1]
+			case "count":
+				intVal, err := strconv.Atoi(parts[1])
+				if err == nil {
+					count = &intVal
+				}
+			case "gender":
+				gender = &parts[1]
+			default:
+				data[parts[0]] = parts[1]
+			}
+		}
+
+		options := TranslateOptions{
+			Count:  count,
+			Gender: gender,
+			Data:   data,
+		}
+
+		return t.Translate(lang, key, options)
+	}
 }
