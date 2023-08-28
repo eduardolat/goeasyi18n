@@ -84,6 +84,24 @@ func TestTranslate(t *testing.T) {
 		}
 	})
 
+	t.Run("method HasLanguage should work", func(t *testing.T) {
+		i18n := NewI18n(Config{})
+		i18n.AddLanguage("en", TranslateStrings{})
+		i18n.AddLanguage("es", TranslateStrings{})
+
+		if !i18n.HasLanguage("en") {
+			t.Errorf("expected language en to exist")
+		}
+
+		if !i18n.HasLanguage("es") {
+			t.Errorf("expected language es to exist")
+		}
+
+		if i18n.HasLanguage("xxx") {
+			t.Errorf("expected language xxx to not exist")
+		}
+	})
+
 	t.Run("english should be the default fallback language even if multiple langs are added", func(t *testing.T) {
 		i18n := NewI18n(Config{})
 

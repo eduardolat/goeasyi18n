@@ -69,6 +69,12 @@ func (t *i18n) AddLanguage(languageName string, translateStrings TranslateString
 	t.SetPluralizationFunc(languageName, DefaultPluralizationFunc)
 }
 
+// Check if a language is available (if is loaded)
+func (t *i18n) HasLanguage(languageName string) bool {
+	_, ok := t.languages[languageName]
+	return ok
+}
+
 // Set the pluralization function for a language
 func (t *i18n) SetPluralizationFunc(languageName string, fn PluralizationFunc) {
 	t.pluralizationFuncs[languageName] = fn
