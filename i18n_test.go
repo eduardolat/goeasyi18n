@@ -52,26 +52,26 @@ func TestTranslate(t *testing.T) {
 		tests := []struct {
 			lang     string
 			key      string
-			options  TOptions
+			options  Options
 			expected string
 		}{
-			{"en", "welcome", TOptions{}, "Welcome"},
-			{"en", "welcome", TOptions{Gender: createPtr("male")}, "Welcome, sir"},
-			{"en", "welcome", TOptions{Gender: createPtr("female")}, "Welcome, ma'am"},
-			{"en", "emails", TOptions{Count: createPtr(1)}, "You have one email"},
-			{"en", "emails", TOptions{Count: createPtr(5)}, "You have many emails"},
-			{"es", "welcome", TOptions{}, "Bienvenido"},
-			{"es", "welcome", TOptions{Gender: createPtr("Male")}, "Bienvenido, señor"},
-			{"es", "welcome", TOptions{Gender: createPtr("Female")}, "Bienvenida, señora"},
-			{"es", "emails", TOptions{Count: createPtr(1)}, "Tienes un correo"},
-			{"es", "emails", TOptions{Count: createPtr(5)}, "Tienes muchos correos"},
+			{"en", "welcome", Options{}, "Welcome"},
+			{"en", "welcome", Options{Gender: createPtr("male")}, "Welcome, sir"},
+			{"en", "welcome", Options{Gender: createPtr("female")}, "Welcome, ma'am"},
+			{"en", "emails", Options{Count: createPtr(1)}, "You have one email"},
+			{"en", "emails", Options{Count: createPtr(5)}, "You have many emails"},
+			{"es", "welcome", Options{}, "Bienvenido"},
+			{"es", "welcome", Options{Gender: createPtr("Male")}, "Bienvenido, señor"},
+			{"es", "welcome", Options{Gender: createPtr("Female")}, "Bienvenida, señora"},
+			{"es", "emails", Options{Count: createPtr(1)}, "Tienes un correo"},
+			{"es", "emails", Options{Count: createPtr(5)}, "Tienes muchos correos"},
 			// Test fallback language
-			{"xxx", "welcome", TOptions{}, "Welcome"},
+			{"xxx", "welcome", Options{}, "Welcome"},
 			// Test fallback key
-			{"en", "xxx", TOptions{}, ""},
+			{"en", "xxx", Options{}, ""},
 			// Test data interpolation
-			{"en", "greetings", TOptions{Data: map[string]string{"Name": "John"}}, "Hello John"},
-			{"es", "greetings", TOptions{Data: map[string]string{"Name": "John"}}, "Hola John"},
+			{"en", "greetings", Options{Data: map[string]string{"Name": "John"}}, "Hello John"},
+			{"es", "greetings", Options{Data: map[string]string{"Name": "John"}}, "Hola John"},
 		}
 
 		for _, test := range tests {
@@ -119,7 +119,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcome", TOptions{})
+		got := i18n.Translate("xxx", "welcome", Options{})
 		expected := "Welcome"
 
 		if got != expected {
@@ -144,7 +144,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcome", TOptions{})
+		got := i18n.Translate("xxx", "welcome", Options{})
 		expected := "Bienvenido"
 
 		if got != expected {
@@ -162,7 +162,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcomefallbacked", TOptions{
+		got := i18n.Translate("xxx", "welcomefallbacked", Options{
 			Count:  createPtr(5),
 			Gender: createPtr("male"),
 			Data: map[string]string{
@@ -192,13 +192,13 @@ func TestTranslate(t *testing.T) {
 		tests := []struct {
 			lang     string
 			key      string
-			options  TOptions
+			options  Options
 			expected string
 		}{
-			{"en", "print_emails", TOptions{}, "You have emails"},
-			{"en", "print_emails", TOptions{Count: createPtr(0), Data: Data{"EmailQty": 0}}, "You have 0 emails"},
-			{"en", "print_emails", TOptions{Count: createPtr(1), Data: Data{"EmailQty": 1}}, "You have one email"},
-			{"en", "print_emails", TOptions{Count: createPtr(5), Data: Data{"EmailQty": 5}}, "You have 5 emails"},
+			{"en", "print_emails", Options{}, "You have emails"},
+			{"en", "print_emails", Options{Count: createPtr(0), Data: Data{"EmailQty": 0}}, "You have 0 emails"},
+			{"en", "print_emails", Options{Count: createPtr(1), Data: Data{"EmailQty": 1}}, "You have one email"},
+			{"en", "print_emails", Options{Count: createPtr(5), Data: Data{"EmailQty": 5}}, "You have 5 emails"},
 		}
 
 		for _, test := range tests {
@@ -247,15 +247,15 @@ func TestTranslate(t *testing.T) {
 		tests := []struct {
 			lang     string
 			key      string
-			options  TOptions
+			options  Options
 			expected string
 		}{
-			{"en", "print_emails", TOptions{}, "You have emails"},
-			{"en", "print_emails", TOptions{Count: createPtr(0), Data: Data{"EmailQty": 0}}, "You have no emails"},
-			{"en", "print_emails", TOptions{Count: createPtr(1), Data: Data{"EmailQty": 1}}, "You have one email"},
-			{"en", "print_emails", TOptions{Count: createPtr(2), Data: Data{"EmailQty": 2}}, "You have two emails"},
-			{"en", "print_emails", TOptions{Count: createPtr(3), Data: Data{"EmailQty": 3}}, "You have three emails"},
-			{"en", "print_emails", TOptions{Count: createPtr(100), Data: Data{"EmailQty": 100}}, "You have 100 emails"},
+			{"en", "print_emails", Options{}, "You have emails"},
+			{"en", "print_emails", Options{Count: createPtr(0), Data: Data{"EmailQty": 0}}, "You have no emails"},
+			{"en", "print_emails", Options{Count: createPtr(1), Data: Data{"EmailQty": 1}}, "You have one email"},
+			{"en", "print_emails", Options{Count: createPtr(2), Data: Data{"EmailQty": 2}}, "You have two emails"},
+			{"en", "print_emails", Options{Count: createPtr(3), Data: Data{"EmailQty": 3}}, "You have three emails"},
+			{"en", "print_emails", Options{Count: createPtr(100), Data: Data{"EmailQty": 100}}, "You have 100 emails"},
 		}
 
 		for _, test := range tests {
@@ -294,21 +294,21 @@ func TestTranslate(t *testing.T) {
 		tests := []struct {
 			lang     string
 			key      string
-			options  TOptions
+			options  Options
 			expected string
 		}{
-			{"en", "hello_message", TOptions{}, "Hello"},
-			{"en", "hello_message", TOptions{Gender: createPtr("somethingelse")}, "Hello"},
-			{"en", "hello_message", TOptions{Gender: createPtr("male")}, "Hello sir"},
-			{"en", "hello_message", TOptions{Gender: createPtr("female")}, "Hello ma'am"},
-			{"en", "hello_message", TOptions{Gender: createPtr("nonbinary")}, "Hello friend"},
-			{"en", "hello_message", TOptions{Gender: createPtr("non-binary")}, "Hello friend"},
-			{"es", "hello_message", TOptions{}, "Hola"},
-			{"es", "hello_message", TOptions{Gender: createPtr("somethingelse")}, "Hola"},
-			{"es", "hello_message", TOptions{Gender: createPtr("male")}, "Hola amigo"},
-			{"es", "hello_message", TOptions{Gender: createPtr("female")}, "Hola amiga"},
-			{"es", "hello_message", TOptions{Gender: createPtr("nonbinary")}, "Hola amigue"},
-			{"es", "hello_message", TOptions{Gender: createPtr("non-binary")}, "Hola amigue"},
+			{"en", "hello_message", Options{}, "Hello"},
+			{"en", "hello_message", Options{Gender: createPtr("somethingelse")}, "Hello"},
+			{"en", "hello_message", Options{Gender: createPtr("male")}, "Hello sir"},
+			{"en", "hello_message", Options{Gender: createPtr("female")}, "Hello ma'am"},
+			{"en", "hello_message", Options{Gender: createPtr("nonbinary")}, "Hello friend"},
+			{"en", "hello_message", Options{Gender: createPtr("non-binary")}, "Hello friend"},
+			{"es", "hello_message", Options{}, "Hola"},
+			{"es", "hello_message", Options{Gender: createPtr("somethingelse")}, "Hola"},
+			{"es", "hello_message", Options{Gender: createPtr("male")}, "Hola amigo"},
+			{"es", "hello_message", Options{Gender: createPtr("female")}, "Hola amiga"},
+			{"es", "hello_message", Options{Gender: createPtr("nonbinary")}, "Hola amigue"},
+			{"es", "hello_message", Options{Gender: createPtr("non-binary")}, "Hola amigue"},
 		}
 
 		for _, test := range tests {
@@ -390,41 +390,41 @@ func TestTranslate(t *testing.T) {
 		tests := []struct {
 			lang     string
 			key      string
-			options  TOptions
+			options  Options
 			expected string
 		}{
-			{"en", "hello_emails", TOptions{}, "Hello, you have emails"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(0)}, "Hello, you have no emails, sir"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(1)}, "Hello, you have one email, sir"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(2)}, "Hello, you have two emails, sir"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(3)}, "Hello, you have three emails, sir"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, sir"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(0)}, "Hello, you have no emails, ma'am"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(1)}, "Hello, you have one email, ma'am"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(2)}, "Hello, you have two emails, ma'am"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(3)}, "Hello, you have three emails, ma'am"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, ma'am"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(0)}, "Hello, you have no emails, friend"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(1)}, "Hello, you have one email, friend"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(2)}, "Hello, you have two emails, friend"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(3)}, "Hello, you have three emails, friend"},
-			{"en", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, friend"},
-			{"es", "hello_emails", TOptions{}, "Hola, tienes correos"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(0)}, "Hola, no tienes correos, amigo"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(1)}, "Hola, tienes un correo, amigo"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(2)}, "Hola, tienes dos correos, amigo"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(3)}, "Hola, tienes tres correos, amigo"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("male"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amigo"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(0)}, "Hola, no tienes correos, amiga"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(1)}, "Hola, tienes un correo, amiga"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(2)}, "Hola, tienes dos correos, amiga"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(3)}, "Hola, tienes tres correos, amiga"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("female"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amiga"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(0)}, "Hola, no tienes correos, amigue"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(1)}, "Hola, tienes un correo, amigue"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(2)}, "Hola, tienes dos correos, amigue"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(3)}, "Hola, tienes tres correos, amigue"},
-			{"es", "hello_emails", TOptions{Gender: createPtr("nonbinary"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amigue"},
+			{"en", "hello_emails", Options{}, "Hello, you have emails"},
+			{"en", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(0)}, "Hello, you have no emails, sir"},
+			{"en", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(1)}, "Hello, you have one email, sir"},
+			{"en", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(2)}, "Hello, you have two emails, sir"},
+			{"en", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(3)}, "Hello, you have three emails, sir"},
+			{"en", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, sir"},
+			{"en", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(0)}, "Hello, you have no emails, ma'am"},
+			{"en", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(1)}, "Hello, you have one email, ma'am"},
+			{"en", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(2)}, "Hello, you have two emails, ma'am"},
+			{"en", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(3)}, "Hello, you have three emails, ma'am"},
+			{"en", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, ma'am"},
+			{"en", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(0)}, "Hello, you have no emails, friend"},
+			{"en", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(1)}, "Hello, you have one email, friend"},
+			{"en", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(2)}, "Hello, you have two emails, friend"},
+			{"en", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(3)}, "Hello, you have three emails, friend"},
+			{"en", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hello, you have 100 emails, friend"},
+			{"es", "hello_emails", Options{}, "Hola, tienes correos"},
+			{"es", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(0)}, "Hola, no tienes correos, amigo"},
+			{"es", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(1)}, "Hola, tienes un correo, amigo"},
+			{"es", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(2)}, "Hola, tienes dos correos, amigo"},
+			{"es", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(3)}, "Hola, tienes tres correos, amigo"},
+			{"es", "hello_emails", Options{Gender: createPtr("male"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amigo"},
+			{"es", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(0)}, "Hola, no tienes correos, amiga"},
+			{"es", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(1)}, "Hola, tienes un correo, amiga"},
+			{"es", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(2)}, "Hola, tienes dos correos, amiga"},
+			{"es", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(3)}, "Hola, tienes tres correos, amiga"},
+			{"es", "hello_emails", Options{Gender: createPtr("female"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amiga"},
+			{"es", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(0)}, "Hola, no tienes correos, amigue"},
+			{"es", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(1)}, "Hola, tienes un correo, amigue"},
+			{"es", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(2)}, "Hola, tienes dos correos, amigue"},
+			{"es", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(3)}, "Hola, tienes tres correos, amigue"},
+			{"es", "hello_emails", Options{Gender: createPtr("nonbinary"), Count: createPtr(100), Data: Data{"EmailQty": 100}}, "Hola, tienes 100 correos, amigue"},
 		}
 
 		for _, test := range tests {
@@ -459,12 +459,12 @@ func TestTranslate(t *testing.T) {
 		tests := []struct {
 			lang     string
 			key      string
-			options  TOptions
+			options  Options
 			expected string
 		}{
-			{"xxx", "xxx", TOptions{}, ""},
-			{"en", "xxx", TOptions{}, ""},
-			{"es", "xxx", TOptions{}, ""},
+			{"xxx", "xxx", Options{}, ""},
+			{"en", "xxx", Options{}, ""},
+			{"es", "xxx", Options{}, ""},
 		}
 
 		for _, test := range tests {
@@ -487,8 +487,8 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("en", "welcome", TOptions{})
-		gotT := i18n.T("en", "welcome", TOptions{})
+		got := i18n.Translate("en", "welcome", Options{})
+		gotT := i18n.T("en", "welcome", Options{})
 		expected := "Welcome"
 
 		if got != expected {
