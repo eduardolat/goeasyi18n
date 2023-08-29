@@ -192,53 +192,65 @@ tempTemplate := template.New("main").Funcs(
 
 Then you can use it in your template like this:
 
-{{Translate "lang:en" "key:hello_emails" "gender:nonbinary" "count:100" "SomeData:Anything"}}
+{{Translate "lang" "en" "key" "hello_emails" "gender" "nonbinary" "count" "100" "SomeData" "Anything"}}
+
+The format is key-value based and the order doesn't matter.
+This is the format:
+
+{{Translate "key1" "value1" "key2" "value2" ...}}
 
 Arguments:
 
-- "lang:en": Language code (e.g., "en", "es").
-- "key:hello_emails": Translation key.
-- "gender:nonbinary": Gender for the translation (optional).
-- "count:100": Count for pluralization (optional).
+- "lang" "en": Language code (e.g., "en", "es").
+- "key" "hello_emails": Translation key.
+- "gender" "nonbinary": Gender for the translation (optional).
+- "count" "100": Count for pluralization (optional).
 - Additional key-value pairs will be added to the Data map.
 
-As you can imagine, lang, key, gender and count are reserved keys.
+Arguments are passed in pairs. The first item in each pair is the key, and the second is the value.
+
+Key-Value Explanation:
+- Each argument is processed as a pair: the first string is considered the key and the second string is the value.
+- For example, in "lang" "en", "lang" is the key and "en" is the value.
+
+As you can imagine, "lang", "key", "gender", and "count" are reserved keys.
 You can use any other key you want to pass data to translation.
 
 Note: All arguments are strings. The function will attempt to convert "count" to an integer.
 */
-func (t *I18n) NewTemplatingTranslateFunc() func(args ...any) string {
-	return func(args ...any) string {
+func (t *I18n) NewTemplatingTranslateFunc() func(args ...interface{}) string {
+	return func(args ...interface{}) string {
 		var lang, key string
 		var gender *string
 		var count *int
 		data := make(Data)
 
-		for _, arg := range args {
-			strArg, ok := arg.(string)
-			if !ok {
+		for i := 0; i < len(args); i += 2 {
+			if i+1 >= len(args) {
+				break
+			}
+
+			keyStr, ok1 := args[i].(string)
+			valueStr, ok2 := args[i+1].(string)
+
+			if !ok1 || !ok2 {
 				continue
 			}
 
-			parts := strings.SplitN(strArg, ":", 2)
-			if len(parts) != 2 {
-				continue
-			}
-
-			switch parts[0] {
+			switch keyStr {
 			case "lang":
-				lang = parts[1]
+				lang = valueStr
 			case "key":
-				key = parts[1]
+				key = valueStr
 			case "count":
-				intVal, err := strconv.Atoi(parts[1])
+				intVal, err := strconv.Atoi(valueStr)
 				if err == nil {
 					count = &intVal
 				}
 			case "gender":
-				gender = &parts[1]
+				gender = &valueStr
 			default:
-				data[parts[0]] = parts[1]
+				data[keyStr] = valueStr
 			}
 		}
 

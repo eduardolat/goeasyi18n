@@ -512,7 +512,7 @@ func TestTranslate(t *testing.T) {
 
 		templateFunc := i18n.NewTemplatingTranslateFunc()
 
-		result := execI18nTemplate(templateFunc, `{{Translate "lang:en" "key:welcome"}}`)
+		result := execI18nTemplate(templateFunc, `{{Translate "lang" "en" "key" "welcome"}}`)
 
 		if result != "Welcome" {
 			t.Errorf("expected %s; got %s", "Welcome", result)
@@ -531,7 +531,7 @@ func TestTranslate(t *testing.T) {
 
 		templateFunc := i18n.NewTemplatingTranslateFunc()
 
-		result := execI18nTemplate(templateFunc, `{{Translate "lang:en" "key:welcome" "Name:John" "SurName:Doe" }}`)
+		result := execI18nTemplate(templateFunc, `{{Translate "lang" "en" "key" "welcome" "Name" "John" "SurName" "Doe" }}`)
 		expected := "Welcome John Doe"
 
 		if result != expected {
@@ -574,20 +574,20 @@ func TestTranslate(t *testing.T) {
 			templateText string
 			expected     string
 		}{
-			{`{{Translate "lang:en" "key:welcome_emails"}}`, "Welcome, you have emails"},
-			{`{{Translate "lang:en" "key:welcome_emails" "count:1"}}`, "Welcome, you have one email"},
-			{`{{Translate "lang:en" "key:welcome_emails" "count:5" "EmailQty:5"}}`, "Welcome, you have 5 emails"},
-			{`{{Translate "lang:en" "key:welcome_emails" "count:1" "gender:male"}}`, "Welcome, you have one email, sir"},
-			{`{{Translate "lang:en" "key:welcome_emails" "count:5" "gender:male" "EmailQty:5"}}`, "Welcome, you have 5 emails, sir"},
-			{`{{Translate "lang:en" "key:welcome_emails" "count:1" "gender:female"}}`, "Welcome, you have one email, madam"},
-			{`{{Translate "lang:en" "key:welcome_emails" "count:5" "gender:female" "EmailQty:5"}}`, "Welcome, you have 5 emails, madam"},
-			{`{{Translate "lang:es" "key:welcome_emails"}}`, "Bienvenido, tienes correos"},
-			{`{{Translate "lang:es" "key:welcome_emails" "count:1"}}`, "Bienvenido, tienes un correo"},
-			{`{{Translate "lang:es" "key:welcome_emails" "count:5" "EmailQty:5"}}`, "Bienvenido, tienes 5 correos"},
-			{`{{Translate "lang:es" "key:welcome_emails" "count:1" "gender:male"}}`, "Bienvenido, tienes un correo, amigo"},
-			{`{{Translate "lang:es" "key:welcome_emails" "count:5" "gender:male" "EmailQty:5"}}`, "Bienvenido, tienes 5 correos, amigo"},
-			{`{{Translate "lang:es" "key:welcome_emails" "count:1" "gender:female"}}`, "Bienvenida, tienes un correo, amiga"},
-			{`{{Translate "lang:es" "key:welcome_emails" "count:5" "gender:female" "EmailQty:5"}}`, "Bienvenida, tienes 5 correos, amiga"},
+			{`{{Translate "lang" "en" "key" "welcome_emails"}}`, "Welcome, you have emails"},
+			{`{{Translate "lang" "en" "key" "welcome_emails" "count" "1"}}`, "Welcome, you have one email"},
+			{`{{Translate "lang" "en" "key" "welcome_emails" "count" "5" "EmailQty" "5"}}`, "Welcome, you have 5 emails"},
+			{`{{Translate "lang" "en" "key" "welcome_emails" "count" "1" "gender" "male"}}`, "Welcome, you have one email, sir"},
+			{`{{Translate "lang" "en" "key" "welcome_emails" "count" "5" "gender" "male" "EmailQty" "5"}}`, "Welcome, you have 5 emails, sir"},
+			{`{{Translate "lang" "en" "key" "welcome_emails" "count" "1" "gender" "female"}}`, "Welcome, you have one email, madam"},
+			{`{{Translate "lang" "en" "key" "welcome_emails" "count" "5" "gender" "female" "EmailQty" "5"}}`, "Welcome, you have 5 emails, madam"},
+			{`{{Translate "lang" "es" "key" "welcome_emails"}}`, "Bienvenido, tienes correos"},
+			{`{{Translate "lang" "es" "key" "welcome_emails" "count" "1"}}`, "Bienvenido, tienes un correo"},
+			{`{{Translate "lang" "es" "key" "welcome_emails" "count" "5" "EmailQty" "5"}}`, "Bienvenido, tienes 5 correos"},
+			{`{{Translate "lang" "es" "key" "welcome_emails" "count" "1" "gender" "male"}}`, "Bienvenido, tienes un correo, amigo"},
+			{`{{Translate "lang" "es" "key" "welcome_emails" "count" "5" "gender" "male" "EmailQty" "5"}}`, "Bienvenido, tienes 5 correos, amigo"},
+			{`{{Translate "lang" "es" "key" "welcome_emails" "count" "1" "gender" "female"}}`, "Bienvenida, tienes un correo, amiga"},
+			{`{{Translate "lang" "es" "key" "welcome_emails" "count" "5" "gender" "female" "EmailQty" "5"}}`, "Bienvenida, tienes 5 correos, amiga"},
 		}
 
 		for i, test := range tests {
