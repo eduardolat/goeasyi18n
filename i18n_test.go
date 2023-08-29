@@ -152,6 +152,31 @@ func TestTranslate(t *testing.T) {
 		}
 	})
 
+	t.Run("should fallback complex use case", func(t *testing.T) {
+		i18n := NewI18n(Config{})
+
+		i18n.AddLanguage("en", TranslateStrings{
+			TranslateString{
+				Key:      "welcomefallbacked",
+				ManyMale: "Welcome, you have {{.EmailQty}} emails, sir {{.Name}}",
+			},
+		})
+
+		got := i18n.Translate("xxx", "welcomefallbacked", TranslateOptions{
+			Count:  createPtr(5),
+			Gender: createPtr("male"),
+			Data: map[string]string{
+				"EmailQty": "5",
+				"Name":     "John",
+			},
+		})
+		expected := "Welcome, you have 5 emails, sir John"
+
+		if got != expected {
+			t.Errorf("expected %s; got %s", expected, got)
+		}
+	})
+
 	t.Run("the pluralization should work with default options (only one and many)", func(t *testing.T) {
 		i18n := NewI18n(Config{})
 

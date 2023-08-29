@@ -96,7 +96,8 @@ func (t *I18n) Translate(languageName string, translateKey string, options Trans
 		return ""
 	}
 	if !okLang {
-		lang = fallbackLang
+		copy(lang, fallbackLang)
+		languageName = t.fallbackLanguageName
 	}
 
 	// Get the translate string from key or fallback if not found
