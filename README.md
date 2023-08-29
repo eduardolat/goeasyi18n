@@ -29,8 +29,8 @@ import (
 func main() {
 	// 1. Create a new i18n instance
 	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{
-    DefaultLanguage: "en", // It's optional, the default value is "en"
-  })
+		DefaultLanguage: "en", // It's optional, the default value is "en"
+	})
 
 	// 2. Add languages and its translations (can be loaded from a JSON/YAML file)
 	i18n.AddLanguage("en", goeasyi18n.TranslateStrings{
