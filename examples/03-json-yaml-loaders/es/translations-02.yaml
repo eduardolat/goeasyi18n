@@ -1,0 +1,2 @@
+- key: hello_admin
+  default: Hola {{.Name}}, eres un administrador

@@ -1,0 +1,10 @@
+[
+  {
+    "Key": "hello_world",
+    "Default": "Hello World"
+  },
+  {
+    "Key": "hello_user",
+    "Default": "Hello {{.Name}}"
+  }
+]

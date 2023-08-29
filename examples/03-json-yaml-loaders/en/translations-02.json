@@ -1,0 +1,6 @@
+[
+  {
+    "key": "hello_admin",
+    "default": "Hello {{.Name}}, you are an admin"
+  }
+]

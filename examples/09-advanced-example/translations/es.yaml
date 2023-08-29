@@ -1,0 +1,15 @@
+- Key: hello_world
+  Default: Hola Mundo
+
+- Key: hello_name
+  Default: Hola {{.Name}}
+
+- Key: unread_emails
+  One: Tienes un correo sin leer.
+  Many: Tienes {{.Count}} correos sin leer.
+
+- Key: friend_unread_emails
+  OneMale: Él ({{.Name}}) te ha enviado un correo.
+  OneFemale: Ella ({{.Name}}) te ha enviado un correo.
+  ManyMale: Él ({{.Name}}) te ha enviado {{.Count}} correos.
+  ManyFemale: Ella ({{.Name}}) te ha enviado {{.Count}} correos.

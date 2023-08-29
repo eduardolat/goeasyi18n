@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go Easy i18n - Website example</title>
+    <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" />
+
+    <style>
+      [un-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="w-screen h-screen flex flex-col space-y-4 justify-center text-center" un-cloak>
+    <div>
+      <h2 class="text-xl">
+        <b>Detected language:</b>
+        {{.Lang}}
+      </h2>
+
+      <h1 class="text-center text-3xl">Go Easy i18n - Website example</h1>
+
+      {{if not .HasLanguage}}
+        <div class="bg-red-50 border border-red-800 p-4 rounded mx-auto max-w-2xl mt-2">
+          Language {{.Lang}} not found.
+        </div>
+      {{end}}
+    </div>
+
+    <div class="grid grid-cols-5 gap-2 max-w-5xl mx-auto">
+      <div class="flex justify-center">
+        <a href="/?lang=en">
+          <button class="rounded p-2 bg-gray-300 text-black">
+            Switch to
+            <span class="font-bold">English</span>
+          </button>
+        </a>
+      </div>
+      <div class="flex justify-center">
+        <a href="/?lang=es">
+          <button class="rounded p-2 bg-gray-300 text-black">
+            Switch to
+            <span class="font-bold">Spanish</span>
+          </button>
+        </a>
+      </div>
+      <div class="flex justify-center">
+        <a href="/?lang=pt">
+          <button class="rounded p-2 bg-gray-300 text-black">
+            Switch to
+            <span class="font-bold">Portuguese</span>
+          </button>
+        </a>
+      </div>
+      <div class="flex justify-center">
+        <a href="/?lang=fr">
+          <button class="rounded p-2 bg-gray-300 text-black">
+            Switch to
+            <span class="font-bold">French</span>
+          </button>
+        </a>
+      </div>
+      <div class="flex justify-center">
+        <a href="/?lang=xxx">
+          <button class="rounded p-2 bg-gray-300 text-black">
+            Switch to
+            <span class="font-bold">XXX Lang</span>
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <div
+      class="text-center max-w-5xl mx-auto text-left bg-green-50 w-full p-4 rounded-lg border border-green-800"
+    >
+      <h3 class="text-xl font-bold">Translation with key "hello_world"</h3>
+      <p>{{Translate .TLang "key:hello_world"}}</p>
+
+      <br />
+
+      <h3 class="text-xl font-bold">Translation with key "hello_name"</h3>
+      <p>{{Translate .TLang "key:hello_name" "Name:John Doe"}}</p>
+
+      <br />
+
+      <h3 class="text-xl font-bold">Translation with key "unread_emails"</h3>
+      <p>{{Translate .TLang "key:unread_emails" "count:1" "Count:1"}}</p>
+      <p>{{Translate .TLang "key:unread_emails" "count:10" "Count:10"}}</p>
+
+      <br />
+
+      <h3 class="text-xl font-bold">Translation with key "friend_unread_emails"</h3>
+      <p>{{Translate .TLang "key:friend_unread_emails" "count:1" "gender:male" "Count:1" "Name:John"}}</p>
+      <p>{{Translate .TLang "key:friend_unread_emails" "count:10" "gender:male" "Count:10" "Name:John"}}</p>
+      <p>{{Translate .TLang "key:friend_unread_emails" "count:1" "gender:female" "Count:1" "Name:Jane"}}</p>
+      <p>{{Translate .TLang "key:friend_unread_emails" "count:10" "gender:female" "Count:10" "Name:Jane"}}</p>
+    </div>
+  </body>
+</html>

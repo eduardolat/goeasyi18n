@@ -1,0 +1,15 @@
+- Key: hello_world
+  Default: Hello World
+
+- Key: hello_name
+  Default: Hello {{.Name}}
+
+- Key: unread_emails
+  One: You have one unread email.
+  Many: You have {{.Count}} unread emails.
+
+- Key: friend_unread_emails
+  OneMale: He ({{.Name}}) sent you an email.
+  OneFemale: She ({{.Name}}) sent you an email.
+  ManyMale: He ({{.Name}}) sent you {{.Count}} emails.
+  ManyFemale: She ({{.Name}}) sent you {{.Count}} emails.
