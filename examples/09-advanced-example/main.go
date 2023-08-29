@@ -18,8 +18,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	hasLanguage := i18n.HasLanguage(lang)
 
 	// Execute the template using the detected language
-	// Because the template function accepts the language in the format "lang:xx"
-	// We need to pass the language formatted as "lang:xx"
 	templateData := map[string]any{
 		"Lang":        lang,
 		"HasLanguage": hasLanguage,
