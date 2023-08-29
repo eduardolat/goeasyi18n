@@ -80,15 +80,15 @@ func (t *I18n) SetPluralizationFunc(languageName string, fn PluralizationFunc) {
 	t.pluralizationFuncs[languageName] = fn
 }
 
-// Additional options for the Translate function
-type TranslateOptions struct {
+// Translate Options: Additional options for the Translate function
+type TOptions struct {
 	Data   any
 	Count  *int
 	Gender *string // male, female, nonbinary, non-binary (case insensitive)
 }
 
 // Translate a string using its key and the language name
-func (t *I18n) Translate(languageName string, translateKey string, options TranslateOptions) string {
+func (t *I18n) Translate(languageName string, translateKey string, options TOptions) string {
 	// Get lang and fallback if not found
 	lang, okLang := t.languages[languageName]
 	fallbackLang, okFallbackLang := t.languages[t.fallbackLanguageName]
@@ -171,7 +171,7 @@ func (t *I18n) Translate(languageName string, translateKey string, options Trans
 }
 
 // T is a shortcut for Translate
-func (t *I18n) T(languageName string, translateKey string, options TranslateOptions) string {
+func (t *I18n) T(languageName string, translateKey string, options TOptions) string {
 	return t.Translate(languageName, translateKey, options)
 }
 
@@ -254,7 +254,7 @@ func (t *I18n) NewTemplatingTranslateFunc() func(args ...interface{}) string {
 			}
 		}
 
-		options := TranslateOptions{
+		options := TOptions{
 			Count:  count,
 			Gender: gender,
 			Data:   data,

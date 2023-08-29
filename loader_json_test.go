@@ -86,7 +86,7 @@ func TestLoadFromJson(t *testing.T) {
 		}
 		i18n.AddLanguage("en", english)
 
-		result := i18n.Translate("en", "hello", TranslateOptions{})
+		result := i18n.Translate("en", "hello", TOptions{})
 		expected := "Hello"
 
 		if result != expected {
