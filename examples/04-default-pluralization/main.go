@@ -13,8 +13,8 @@ func main() {
 	// 2. Create your translations
 	// If something goes wrong, the default value is used
 	// The default pluralization only works for one and many keys
-	// If the count (later in the TranslateOptions) is 1, the one key is used
-	// If the count (later in the TranslateOptions) is greater than 1, the many key is used
+	// If the count (later in the Options) is 1, the one key is used
+	// If the count (later in the Options) is greater than 1, the many key is used
 	enTranslations := goeasyi18n.TranslateStrings{
 		{
 			Key:     "hello_emails",
@@ -37,11 +37,11 @@ func main() {
 	i18n.AddLanguage("en", enTranslations)
 	i18n.AddLanguage("es", esTranslations)
 
-	// 4. Create the TranslateOptions
+	// 4. Create the Options
 	// The Count field is a *int that contains a number which is used to
 	// select the correct pluralization key
 	oneEmail := 1 // Get this value from your database or wherever you want
-	oneEmailOptions := goeasyi18n.TranslateOptions{
+	oneEmailOptions := goeasyi18n.Options{
 		Count: &oneEmail,
 		Data: map[string]any{
 			"EmailQty": oneEmail,
@@ -49,7 +49,7 @@ func main() {
 	}
 
 	manyEmails := 5 // Get this value from your database or wherever you want
-	manyEmailsOptions := goeasyi18n.TranslateOptions{
+	manyEmailsOptions := goeasyi18n.Options{
 		Count: &manyEmails,
 		Data: map[string]any{
 			"EmailQty": manyEmails,

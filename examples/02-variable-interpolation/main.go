@@ -33,7 +33,7 @@ func main() {
 
 	// 4. Crete the options for the translation with the variables
 	// The Data field is a map[string]any that contains the variables to be replaced
-	options := goeasyi18n.TranslateOptions{
+	options := goeasyi18n.Options{
 		Data: map[string]any{
 			"Name":    "John",
 			"SurName": "Doe",

@@ -29,7 +29,7 @@ import (
 func main() {
 	// 1. Create a new i18n instance
 	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{
-		DefaultLanguage: "en", // It's optional, the default value is "en"
+		FallbackLanguageName: "en", // It's optional, the default value is "en"
 	})
 
 	// 2. Add languages and its translations (can be loaded from a JSON/YAML file)
@@ -48,10 +48,11 @@ func main() {
 	})
 
 	// 3. You are done! 🎉 Just get that translations!
-	t1 := i18n.Translate("en", "hello_message", goeasyi18n.TranslateOptions{})
-	t2 := i18n.Translate("es", "hello_message", goeasyi18n.TranslateOptions{})
+	t1 := i18n.Translate("en", "hello_message", goeasyi18n.Options{})
+	t2 := i18n.Translate("es", "hello_message", goeasyi18n.Options{})
 
 	fmt.Printf("%s\n%s\n", t1, t2)
+
 	/*
 		Prints:
 		Hello, welcome to Go Easy i18n!

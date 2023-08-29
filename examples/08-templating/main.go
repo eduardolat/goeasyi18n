@@ -20,25 +20,25 @@ import (
 
 const templateText = `Welcome to Go Easy i18n!
 
-{{Translate "lang:en" "key:hello_message" "Name:John Doe"}}
-{{Translate "lang:es" "key:hello_message" "Name:John Doe"}}
+{{Translate "lang" "en" "key" "hello_message" "Name" "John Doe"}}
+{{Translate "lang" "es" "key" "hello_message" "Name" "John Doe"}}
 
-{{Translate "lang:en" "key:unread_messages" "count:1" "Qty:1"}}
-{{Translate "lang:en" "key:unread_messages" "count:10" "Qty:10"}}
-{{Translate "lang:es" "key:unread_messages" "count:1" "Qty:1"}}
-{{Translate "lang:es" "key:unread_messages" "count:10" "Qty:10"}}
+{{Translate "lang" "en" "key" "unread_messages" "count" "1" "Qty" "1"}}
+{{Translate "lang" "en" "key" "unread_messages" "count" "10" "Qty" "10"}}
+{{Translate "lang" "es" "key" "unread_messages" "count" "1" "Qty" "1"}}
+{{Translate "lang" "es" "key" "unread_messages" "count" "10" "Qty" "10"}}
 
-{{Translate "lang:en" "key:friend_update" "gender:male" "Name:John"}}
-{{Translate "lang:en" "key:friend_update" "gender:female" "Name:Jane"}}
-{{Translate "lang:en" "key:friend_update" "gender:nonbinary" "Name:Jane"}}
-{{Translate "lang:es" "key:friend_update" "gender:male" "Name:John"}}
-{{Translate "lang:es" "key:friend_update" "gender:female" "Name:Jane"}}
-{{Translate "lang:es" "key:friend_update" "gender:nonbinary" "Name:Jane"}}
+{{Translate "lang" "en" "key" "friend_update" "gender" "male" "Name" "John"}}
+{{Translate "lang" "en" "key" "friend_update" "gender" "female" "Name" "Jane"}}
+{{Translate "lang" "en" "key" "friend_update" "gender" "nonbinary" "Name" "Jane"}}
+{{Translate "lang" "es" "key" "friend_update" "gender" "male" "Name" "John"}}
+{{Translate "lang" "es" "key" "friend_update" "gender" "female" "Name" "Jane"}}
+{{Translate "lang" "es" "key" "friend_update" "gender" "nonbinary" "Name" "Jane"}}
 
-{{Translate "lang:en" "key:friend_request" "gender:male" "count:1" "Qty:1"}}
-{{Translate "lang:en" "key:friend_request" "gender:female" "count:10" "Qty:10"}}
-{{Translate "lang:es" "key:friend_request" "gender:male" "count:1" "Qty:1"}}
-{{Translate "lang:es" "key:friend_request" "gender:female" "count:10" "Qty:10"}}
+{{Translate "lang" "en" "key" "friend_request" "gender" "male" "count" "1" "Qty" "1"}}
+{{Translate "lang" "en" "key" "friend_request" "gender" "female" "count" "10" "Qty" "10"}}
+{{Translate "lang" "es" "key" "friend_request" "gender" "male" "count" "1" "Qty" "1"}}
+{{Translate "lang" "es" "key" "friend_request" "gender" "female" "count" "10" "Qty" "10"}}
 `
 
 func main() {

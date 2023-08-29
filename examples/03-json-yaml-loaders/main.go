@@ -32,8 +32,8 @@ func main() {
 	i18n.AddLanguage("es", esTranslations)
 
 	// 4. Crete the options for the translations with/without interpolations
-	options := goeasyi18n.TranslateOptions{}
-	optionsWithName := goeasyi18n.TranslateOptions{
+	options := goeasyi18n.Options{}
+	optionsWithName := goeasyi18n.Options{
 		Data: map[string]string{
 			"Name": "John Doe",
 		},

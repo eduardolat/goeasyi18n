@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	// Get the lang query param, you are responsible in your app to get the lang
+	// In this example is just passed as a query param but you can use a cookie
+	// or an url segment or whatever you want
 	lang := "en" // Default language
 	if r.URL.Query().Get("lang") != "" {
 		lang = r.URL.Query().Get("lang")
@@ -21,7 +22,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// We need to pass the language formatted as "lang:xx"
 	templateData := map[string]any{
 		"Lang":        lang,
-		"TLang":       fmt.Sprintf("lang:%s", lang),
 		"HasLanguage": hasLanguage,
 	}
 

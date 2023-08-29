@@ -60,7 +60,7 @@ func main() {
 	i18n.AddLanguage("en", enTranslations)
 	i18n.AddLanguage("es", esTranslations)
 
-	// 4. Create the TranslateOptions
+	// 4. Create the Options
 	// The Gender field is a *string that contains the gender to use
 	// Here you can use male, female, nonbinary or non-binary
 	oneInt := 1
@@ -68,7 +68,7 @@ func main() {
 	maleText := "male"
 	femaleText := "female"
 
-	oneMaleOptions := goeasyi18n.TranslateOptions{
+	oneMaleOptions := goeasyi18n.Options{
 		Gender: &maleText,
 		Count:  &oneInt,
 		Data: map[string]any{
@@ -76,7 +76,7 @@ func main() {
 		},
 	}
 
-	manyFemaleOptions := goeasyi18n.TranslateOptions{
+	manyFemaleOptions := goeasyi18n.Options{
 		Gender: &femaleText,
 		Count:  &manyInt,
 		Data: map[string]any{

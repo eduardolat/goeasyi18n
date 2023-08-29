@@ -38,7 +38,7 @@ Let's get started! 🚀
 // The only difference is that you can define your own pluralization rules
 // Start creating a function that returns a string and receives a int
 func MyCustomPluralization(count int) string {
-	// The count variable is the same as the Count field in the TranslateOptions
+	// The count variable is the same as the Count field in the Options
 	// The string returned by this function will be used as the pluralization key
 	if count == 0 {
 		return "Zero"
@@ -62,8 +62,8 @@ func main() {
 	// 2. Create your translations
 	// If something goes wrong, the default value is used
 	// The default pluralization only works for one and many keys
-	// If the count (later in the TranslateOptions) is 1, the one key is used
-	// If the count (later in the TranslateOptions) is greater than 1, the many key is used
+	// If the count (later in the Options) is 1, the one key is used
+	// If the count (later in the Options) is greater than 1, the many key is used
 	enTranslations := goeasyi18n.TranslateStrings{
 		{
 			Key:     "hello_emails",
@@ -98,7 +98,7 @@ func main() {
 	// The "es" language will still use the default pluralization to see the differences
 	i18n.SetPluralizationFunc("en", MyCustomPluralization)
 
-	// 5. Create the TranslateOptions (we are using a helper that lives at end of this file)
+	// 5. Create the Options (we are using a helper that lives at end of this file)
 	zeroEmailOptions := MakeOptions(0)
 	oneEmailOptions := MakeOptions(1)
 	twoEmailOptions := MakeOptions(2)
@@ -155,9 +155,9 @@ func main() {
 	*/
 }
 
-// Helper function to create the TranslateOptions for pluralization
-func MakeOptions(count int) goeasyi18n.TranslateOptions {
-	options := goeasyi18n.TranslateOptions{
+// Helper function to create the Options for pluralization
+func MakeOptions(count int) goeasyi18n.Options {
+	options := goeasyi18n.Options{
 		Count: &count,
 		Data:  map[string]any{"EmailQty": count},
 	}
