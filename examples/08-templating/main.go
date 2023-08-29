@@ -9,12 +9,12 @@ import (
 	The templating feature allows you to make translations inside your templates.
 	It works with both text/template and html/template.
 
-	To pass the language use: "lang:xxx"
-	To pass the key use:      "key:xxx"
-	To pass the count use:    "count:xxx"
-	To pass the gender use:   "gender:male/female/nonbinary"
+	To pass the language use: "lang" "xxx"
+	To pass the key use:      "key" "xxx"
+	To pass the count use:    "count" "xxx"
+	To pass the gender use:   "gender" "male/female/nonbinary"
 
-	All other "key:value" pairs will be converted to strings and passed to
+	All other "key" "value" pairs will be converted to strings and passed to
 	the translation as variables.
 */
 

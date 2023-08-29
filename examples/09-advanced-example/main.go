@@ -25,7 +25,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		"HasLanguage": hasLanguage,
 	}
 
-	// The template translation function is only for simple translations
 	// Instead of using the {{Translate ...}} inside the template, you can also
 	// translate the text here and pass it to the template for example:
 	// someTranslation := i18n.Translate(lang, "some_translation_key")
