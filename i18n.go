@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-type i18n struct {
+type I18n struct {
 	languages            map[string]TranslateStrings
 	pluralizationFuncs   map[string]PluralizationFunc
 	fallbackLanguageName string
@@ -19,8 +19,8 @@ type Config struct {
 }
 
 // Create a new i18n object
-func NewI18n(config Config) *i18n {
-	instance := i18n{
+func NewI18n(config Config) *I18n {
+	instance := I18n{
 		languages:          make(map[string]TranslateStrings),
 		pluralizationFuncs: make(map[string]PluralizationFunc),
 	}
@@ -64,19 +64,19 @@ func createGenderForm(input string) string {
 }
 
 // Add a language to the i18n object with its translations
-func (t *i18n) AddLanguage(languageName string, translateStrings TranslateStrings) {
+func (t *I18n) AddLanguage(languageName string, translateStrings TranslateStrings) {
 	t.languages[languageName] = translateStrings
 	t.SetPluralizationFunc(languageName, DefaultPluralizationFunc)
 }
 
 // Check if a language is available (if is loaded)
-func (t *i18n) HasLanguage(languageName string) bool {
+func (t *I18n) HasLanguage(languageName string) bool {
 	_, ok := t.languages[languageName]
 	return ok
 }
 
 // Set the pluralization function for a language
-func (t *i18n) SetPluralizationFunc(languageName string, fn PluralizationFunc) {
+func (t *I18n) SetPluralizationFunc(languageName string, fn PluralizationFunc) {
 	t.pluralizationFuncs[languageName] = fn
 }
 
@@ -88,7 +88,7 @@ type TranslateOptions struct {
 }
 
 // Translate a string using its key and the language name
-func (t *i18n) Translate(languageName string, translateKey string, options TranslateOptions) string {
+func (t *I18n) Translate(languageName string, translateKey string, options TranslateOptions) string {
 	// Get lang and fallback if not found
 	lang, okLang := t.languages[languageName]
 	fallbackLang, okFallbackLang := t.languages[t.fallbackLanguageName]
@@ -170,7 +170,7 @@ func (t *i18n) Translate(languageName string, translateKey string, options Trans
 }
 
 // T is a shortcut for Translate
-func (t *i18n) T(languageName string, translateKey string, options TranslateOptions) string {
+func (t *I18n) T(languageName string, translateKey string, options TranslateOptions) string {
 	return t.Translate(languageName, translateKey, options)
 }
 
@@ -206,7 +206,7 @@ You can use any other key you want to pass data to translation.
 
 Note: All arguments are strings. The function will attempt to convert "count" to an integer.
 */
-func (t *i18n) NewTemplatingTranslateFunc() func(args ...any) string {
+func (t *I18n) NewTemplatingTranslateFunc() func(args ...any) string {
 	return func(args ...any) string {
 		var lang, key string
 		var gender *string
