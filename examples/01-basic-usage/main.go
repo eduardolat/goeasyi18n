@@ -42,6 +42,9 @@ func main() {
 	// Or you can use the T method (it's just an alias for Translate)
 	t2 := i18n.T("es", "hello_message", goeasyi18n.Options{})
 
+	fmt.Println(t1)
+	fmt.Println(t2)
+
 	/*
 		Prints:
 		Hello, welcome to Go Easy i18n!
@@ -52,8 +55,6 @@ func main() {
 	enExists := i18n.HasLanguage("en")
 	xxExists := i18n.HasLanguage("xx")
 
-	fmt.Println(t1)
-	fmt.Println(t2)
 	fmt.Printf("en exists: %v\n", enExists)
 	fmt.Printf("xx exists: %v\n", xxExists)
 
