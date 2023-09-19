@@ -1,3 +1,15 @@
+<p align="center">
+	<a href="https://github.com/eduardolat/goeasyi18n/actions" target="_blank" rel="noopener">
+		<img src="https://github.com/eduardolat/goeasyi18n/actions/workflows/test.yml/badge.svg" alt="Tests status" />
+	</a>
+	<a href="https://github.com/eduardolat/goeasyi18n/releases" target="_blank" rel="noopener">
+		<img src="https://img.shields.io/github/release/eduardolat/goeasyi18n.svg" alt="Latest releases" />
+	</a>
+	<a href="https://pkg.go.dev/github.com/eduardolat/goeasyi18n" target="_blank" rel="noopener">
+		<img src="https://godoc.org/github.com/ganigeorgiev/fexpr?status.svg" alt="Go package documentation" />
+	</a>
+</p>
+
 # Go Easy i18n
 
 Effortlessly simple i18n for Go. Plurals, gender, and more made easy!
