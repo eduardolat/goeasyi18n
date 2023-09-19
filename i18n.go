@@ -263,3 +263,11 @@ func (t *I18n) NewTemplatingTranslateFunc() func(args ...interface{}) string {
 		return t.Translate(lang, key, options)
 	}
 }
+
+// NewLangTranslateFunc creates a function to translate a string in a specific language
+// without the need to pass the language name every time.
+func (t *I18n) NewLangTranslateFunc(languageName string) func(translateKey string, options Options) string {
+	return func(translateKey string, options Options) string {
+		return t.Translate(languageName, translateKey, options)
+	}
+}

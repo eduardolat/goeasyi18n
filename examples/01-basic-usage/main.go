@@ -51,7 +51,7 @@ func main() {
 		¡Hola, bienvenido a Go Easy i18n!
 	*/
 
-	// Additionally, you can check if a language exists in the i18n instance
+	// 5. (Extra) You can check if a language exists in the i18n instance
 	enExists := i18n.HasLanguage("en")
 	xxExists := i18n.HasLanguage("xx")
 
@@ -62,5 +62,23 @@ func main() {
 		Prints:
 		en exists: true
 		xx exists: false
+	*/
+
+	// 6. (Extra) You can create a translate function for a specific language
+	// to prevent passing the language name every time you want to translate
+	// something
+	translateEn := i18n.NewLangTranslateFunc("en")
+	translateEs := i18n.NewLangTranslateFunc("es")
+
+	t3 := translateEn("hello_message", goeasyi18n.Options{})
+	t4 := translateEs("hello_message", goeasyi18n.Options{})
+
+	fmt.Println(t3)
+	fmt.Println(t4)
+
+	/*
+		Prints:
+		Hello, welcome to Go Easy i18n!
+		¡Hola, bienvenido a Go Easy i18n!
 	*/
 }

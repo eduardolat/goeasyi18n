@@ -599,6 +599,44 @@ func TestTranslate(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("test translate function creation for specific lang", func(t *testing.T) {
+		i18n := NewI18n(Config{})
+
+		i18n.AddLanguage("en", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Welcome",
+			},
+		})
+
+		i18n.AddLanguage("es", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Bienvenido",
+			},
+		})
+
+		enTranslateFunc := i18n.NewLangTranslateFunc("en")
+		esTranslateFunc := i18n.NewLangTranslateFunc("es")
+
+		tests := []struct {
+			translateFunc func(translateKey string, options Options) string
+			expected      string
+		}{
+			{enTranslateFunc, "Welcome"},
+			{esTranslateFunc, "Bienvenido"},
+		}
+
+		for i, test := range tests {
+			t.Run(fmt.Sprintf("translate function creation test - %v", i), func(t *testing.T) {
+				got := test.translateFunc("welcome", Options{})
+				if got != test.expected {
+					t.Errorf("expected %s; got %s", test.expected, got)
+				}
+			})
+		}
+	})
 }
 
 // Function to create pointer to a value
