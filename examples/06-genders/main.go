@@ -62,15 +62,15 @@ func main() {
 	femaleText := "female"
 	nonbinaryText := "nonbinary"
 
-	maleOptions := goeasyi18n.Options{
+	maleOptions := &goeasyi18n.Options{
 		Gender: &maleText,
 	}
 
-	femaleOptions := goeasyi18n.Options{
+	femaleOptions := &goeasyi18n.Options{
 		Gender: &femaleText,
 	}
 
-	nonbinaryOptions := goeasyi18n.Options{
+	nonbinaryOptions := &goeasyi18n.Options{
 		Gender: &nonbinaryText,
 	}
 

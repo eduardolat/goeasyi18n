@@ -86,7 +86,7 @@ func TestLoadFromYaml(t *testing.T) {
 		}
 		i18n.AddLanguage("en", english)
 
-		result := i18n.Translate("en", "hello", Options{})
+		result := i18n.Translate("en", "hello", nil)
 		expected := "Hello"
 
 		if result != expected {

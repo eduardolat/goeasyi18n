@@ -156,8 +156,8 @@ func main() {
 }
 
 // Helper function to create the Options for pluralization
-func MakeOptions(count int) goeasyi18n.Options {
-	options := goeasyi18n.Options{
+func MakeOptions(count int) *goeasyi18n.Options {
+	options := &goeasyi18n.Options{
 		Count: &count,
 		Data:  map[string]any{"EmailQty": count},
 	}

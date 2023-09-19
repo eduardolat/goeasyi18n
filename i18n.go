@@ -88,7 +88,12 @@ type Options struct {
 }
 
 // Translate a string using its key and the language name
-func (t *I18n) Translate(languageName string, translateKey string, options Options) string {
+func (t *I18n) Translate(languageName string, translateKey string, options *Options) string {
+	// Initialize options if nil
+	if options == nil {
+		options = &Options{}
+	}
+
 	// Get lang and fallback if not found
 	lang, okLang := t.languages[languageName]
 	fallbackLang, okFallbackLang := t.languages[t.fallbackLanguageName]
@@ -171,7 +176,7 @@ func (t *I18n) Translate(languageName string, translateKey string, options Optio
 }
 
 // T is a shortcut for Translate
-func (t *I18n) T(languageName string, translateKey string, options Options) string {
+func (t *I18n) T(languageName string, translateKey string, options *Options) string {
 	return t.Translate(languageName, translateKey, options)
 }
 
@@ -254,7 +259,7 @@ func (t *I18n) NewTemplatingTranslateFunc() func(args ...interface{}) string {
 			}
 		}
 
-		options := Options{
+		options := &Options{
 			Count:  count,
 			Gender: gender,
 			Data:   data,
@@ -266,8 +271,8 @@ func (t *I18n) NewTemplatingTranslateFunc() func(args ...interface{}) string {
 
 // NewLangTranslateFunc creates a function to translate a string in a specific language
 // without the need to pass the language name every time.
-func (t *I18n) NewLangTranslateFunc(languageName string) func(translateKey string, options Options) string {
-	return func(translateKey string, options Options) string {
+func (t *I18n) NewLangTranslateFunc(languageName string) func(translateKey string, options *Options) string {
+	return func(translateKey string, options *Options) string {
 		return t.Translate(languageName, translateKey, options)
 	}
 }

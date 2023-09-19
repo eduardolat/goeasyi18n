@@ -76,7 +76,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, test.options)
+				got := i18n.Translate(test.lang, test.key, &test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -119,7 +119,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcome", Options{})
+		got := i18n.Translate("xxx", "welcome", nil)
 		expected := "Welcome"
 
 		if got != expected {
@@ -144,7 +144,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcome", Options{})
+		got := i18n.Translate("xxx", "welcome", nil)
 		expected := "Bienvenido"
 
 		if got != expected {
@@ -162,7 +162,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcomefallbacked", Options{
+		got := i18n.Translate("xxx", "welcomefallbacked", &Options{
 			Count:  createPtr(5),
 			Gender: createPtr("male"),
 			Data: map[string]string{
@@ -203,7 +203,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, test.options)
+				got := i18n.Translate(test.lang, test.key, &test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -260,7 +260,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, test.options)
+				got := i18n.Translate(test.lang, test.key, &test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -313,7 +313,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, test.options)
+				got := i18n.Translate(test.lang, test.key, &test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -429,7 +429,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, test.options)
+				got := i18n.Translate(test.lang, test.key, &test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -469,7 +469,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, test.options)
+				got := i18n.Translate(test.lang, test.key, &test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -487,8 +487,8 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("en", "welcome", Options{})
-		gotT := i18n.T("en", "welcome", Options{})
+		got := i18n.Translate("en", "welcome", nil)
+		gotT := i18n.T("en", "welcome", nil)
 		expected := "Welcome"
 
 		if got != expected {
@@ -621,7 +621,7 @@ func TestTranslate(t *testing.T) {
 		esTranslateFunc := i18n.NewLangTranslateFunc("es")
 
 		tests := []struct {
-			translateFunc func(translateKey string, options Options) string
+			translateFunc func(translateKey string, options *Options) string
 			expected      string
 		}{
 			{enTranslateFunc, "Welcome"},
@@ -630,7 +630,7 @@ func TestTranslate(t *testing.T) {
 
 		for i, test := range tests {
 			t.Run(fmt.Sprintf("translate function creation test - %v", i), func(t *testing.T) {
-				got := test.translateFunc("welcome", Options{})
+				got := test.translateFunc("welcome", nil)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}

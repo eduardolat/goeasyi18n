@@ -41,7 +41,7 @@ func main() {
 	// The Count field is a *int that contains a number which is used to
 	// select the correct pluralization key
 	oneEmail := 1 // Get this value from your database or wherever you want
-	oneEmailOptions := goeasyi18n.Options{
+	oneEmailOptions := &goeasyi18n.Options{
 		Count: &oneEmail,
 		Data: map[string]any{
 			"EmailQty": oneEmail,
@@ -49,7 +49,7 @@ func main() {
 	}
 
 	manyEmails := 5 // Get this value from your database or wherever you want
-	manyEmailsOptions := goeasyi18n.Options{
+	manyEmailsOptions := &goeasyi18n.Options{
 		Count: &manyEmails,
 		Data: map[string]any{
 			"EmailQty": manyEmails,

@@ -49,9 +49,10 @@ func main() {
 
 	// 3. You are done! 🎉 Just get that translations!
 	t1 := i18n.Translate("en", "hello_message", goeasyi18n.Options{})
-	t2 := i18n.Translate("es", "hello_message", goeasyi18n.Options{})
+	t2 := i18n.Translate("es", "hello_message", nil) // Can be nil if you don't need options
 
-	fmt.Printf("%s\n%s\n", t1, t2)
+	fmt.Println(t1)
+	fmt.Println(t2)
 
 	/*
 		Prints:

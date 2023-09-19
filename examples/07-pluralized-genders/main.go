@@ -68,7 +68,7 @@ func main() {
 	maleText := "male"
 	femaleText := "female"
 
-	oneMaleOptions := goeasyi18n.Options{
+	oneMaleOptions := &goeasyi18n.Options{
 		Gender: &maleText,
 		Count:  &oneInt,
 		Data: map[string]any{
@@ -76,7 +76,7 @@ func main() {
 		},
 	}
 
-	manyFemaleOptions := goeasyi18n.Options{
+	manyFemaleOptions := &goeasyi18n.Options{
 		Gender: &femaleText,
 		Count:  &manyInt,
 		Data: map[string]any{

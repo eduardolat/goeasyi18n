@@ -38,9 +38,10 @@ func main() {
 	i18n.AddLanguage("es", esTranslations)
 
 	// 4. You are done! 🎉 Just get that translations!
-	t1 := i18n.Translate("en", "hello_message", goeasyi18n.Options{})
+	t1 := i18n.Translate("en", "hello_message", &goeasyi18n.Options{})
 	// Or you can use the T method (it's just an alias for Translate)
-	t2 := i18n.T("es", "hello_message", goeasyi18n.Options{})
+	// and you can pass nil if you don't need options
+	t2 := i18n.T("es", "hello_message", nil)
 
 	fmt.Println(t1)
 	fmt.Println(t2)
@@ -70,8 +71,8 @@ func main() {
 	translateEn := i18n.NewLangTranslateFunc("en")
 	translateEs := i18n.NewLangTranslateFunc("es")
 
-	t3 := translateEn("hello_message", goeasyi18n.Options{})
-	t4 := translateEs("hello_message", goeasyi18n.Options{})
+	t3 := translateEn("hello_message", nil)
+	t4 := translateEs("hello_message", nil)
 
 	fmt.Println(t3)
 	fmt.Println(t4)
