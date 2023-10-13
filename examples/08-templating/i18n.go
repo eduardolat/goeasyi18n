@@ -7,7 +7,7 @@ import (
 var i18n *goeasyi18n.I18n
 
 func InitializeI18n() {
-	i18n = goeasyi18n.NewI18n(goeasyi18n.Config{})
+	i18n = goeasyi18n.NewI18n()
 
 	enTranslations := goeasyi18n.TranslateStrings{
 		{

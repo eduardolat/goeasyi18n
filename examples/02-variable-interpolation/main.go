@@ -8,7 +8,7 @@ import (
 
 func main() {
 	// 1. Create a new i18n instance
-	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{})
+	i18n := goeasyi18n.NewI18n()
 
 	// 2. Create your translations
 	// You can add any variables to your translations
@@ -33,7 +33,7 @@ func main() {
 
 	// 4. Crete the options for the translation with the variables
 	// The Data field is a map[string]any that contains the variables to be replaced
-	options := &goeasyi18n.Options{
+	options := goeasyi18n.Options{
 		Data: map[string]any{
 			"Name":    "John",
 			"SurName": "Doe",

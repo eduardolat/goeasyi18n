@@ -31,7 +31,7 @@ ZeroNonBinary, OneNonBinary, TwoNonBinary, FewNonBinary, ManyNonBinary
 
 func main() {
 	// 1. Create a new i18n instance
-	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{})
+	i18n := goeasyi18n.NewI18n()
 
 	// 2. Create your translations
 	// If something goes wrong, the default value is used
@@ -39,7 +39,7 @@ func main() {
 		{
 			Key:        "friend_emails",
 			Default:    "Hello, your friend have emails",
-			OneMale:    "Hello, he one email",
+			OneMale:    "Hello, he has one email",
 			ManyFemale: "Hello, she has {{.EmailQty}} emails",
 			// You can add as many combinations as you want
 		},
@@ -68,7 +68,7 @@ func main() {
 	maleText := "male"
 	femaleText := "female"
 
-	oneMaleOptions := &goeasyi18n.Options{
+	oneMaleOptions := goeasyi18n.Options{
 		Gender: &maleText,
 		Count:  &oneInt,
 		Data: map[string]any{
@@ -76,7 +76,7 @@ func main() {
 		},
 	}
 
-	manyFemaleOptions := &goeasyi18n.Options{
+	manyFemaleOptions := goeasyi18n.Options{
 		Gender: &femaleText,
 		Count:  &manyInt,
 		Data: map[string]any{
@@ -98,7 +98,7 @@ func main() {
 
 	/*
 		Prints:
-		Hello, he one email
+		Hello, he has one email
 		Hello, she has 10 emails
 		Hola, él tiene un correo
 		Hola, ella tiene 10 correos

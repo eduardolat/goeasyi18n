@@ -57,7 +57,7 @@ func MyCustomPluralization(count int) string {
 
 func main() {
 	// 1. Create a new i18n instance
-	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{})
+	i18n := goeasyi18n.NewI18n()
 
 	// 2. Create your translations
 	// If something goes wrong, the default value is used
@@ -156,8 +156,8 @@ func main() {
 }
 
 // Helper function to create the Options for pluralization
-func MakeOptions(count int) *goeasyi18n.Options {
-	options := &goeasyi18n.Options{
+func MakeOptions(count int) goeasyi18n.Options {
+	options := goeasyi18n.Options{
 		Count: &count,
 		Data:  map[string]any{"EmailQty": count},
 	}

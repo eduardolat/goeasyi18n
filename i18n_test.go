@@ -9,7 +9,7 @@ import (
 
 func TestTranslate(t *testing.T) {
 	t.Run("simple general tests", func(t *testing.T) {
-		i18n := NewI18n(Config{FallbackLanguageName: "en"})
+		i18n := NewI18n()
 
 		// Add English translations
 		i18n.AddLanguage("en", TranslateStrings{
@@ -76,7 +76,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, &test.options)
+				got := i18n.Translate(test.lang, test.key, test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -85,7 +85,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("method HasLanguage should work", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 		i18n.AddLanguage("en", TranslateStrings{})
 		i18n.AddLanguage("es", TranslateStrings{})
 
@@ -103,7 +103,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("english should be the default fallback language even if multiple langs are added", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -119,7 +119,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcome", nil)
+		got := i18n.Translate("xxx", "welcome")
 		expected := "Welcome"
 
 		if got != expected {
@@ -144,7 +144,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcome", nil)
+		got := i18n.Translate("xxx", "welcome")
 		expected := "Bienvenido"
 
 		if got != expected {
@@ -153,7 +153,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("should fallback complex use case", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -162,7 +162,7 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("xxx", "welcomefallbacked", &Options{
+		got := i18n.Translate("xxx", "welcomefallbacked", Options{
 			Count:  createPtr(5),
 			Gender: createPtr("male"),
 			Data: map[string]string{
@@ -178,7 +178,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("the pluralization should work with default options (only one and many)", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -203,7 +203,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, &test.options)
+				got := i18n.Translate(test.lang, test.key, test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -212,7 +212,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("the pluralization should work with custom pluralization function", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		myPluralizationFn := func(count int) string {
 			if count == 0 {
@@ -260,7 +260,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, &test.options)
+				got := i18n.Translate(test.lang, test.key, test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -269,7 +269,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("should handle gendered translations in multiple languages", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -313,7 +313,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, &test.options)
+				got := i18n.Translate(test.lang, test.key, test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -322,7 +322,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("should handle complex pluralized-gendered translations in multiple languages", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		myPluralizationFn := func(count int) string {
 			if count == 0 {
@@ -429,7 +429,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, &test.options)
+				got := i18n.Translate(test.lang, test.key, test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -438,7 +438,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("should return empty strings on edge incorrect cases", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -469,7 +469,7 @@ func TestTranslate(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.key, func(t *testing.T) {
-				got := i18n.Translate(test.lang, test.key, &test.options)
+				got := i18n.Translate(test.lang, test.key, test.options)
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
@@ -478,7 +478,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("T should be alias for Translate", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -487,8 +487,8 @@ func TestTranslate(t *testing.T) {
 			},
 		})
 
-		got := i18n.Translate("en", "welcome", nil)
-		gotT := i18n.T("en", "welcome", nil)
+		got := i18n.Translate("en", "welcome")
+		gotT := i18n.T("en", "welcome")
 		expected := "Welcome"
 
 		if got != expected {
@@ -501,7 +501,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("test basic templating function", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -520,7 +520,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("test templating function with multiple interpolations", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -540,7 +540,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("test complex templating function", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -601,7 +601,7 @@ func TestTranslate(t *testing.T) {
 	})
 
 	t.Run("test translate function creation for specific lang", func(t *testing.T) {
-		i18n := NewI18n(Config{})
+		i18n := NewI18n()
 
 		i18n.AddLanguage("en", TranslateStrings{
 			TranslateString{
@@ -621,7 +621,7 @@ func TestTranslate(t *testing.T) {
 		esTranslateFunc := i18n.NewLangTranslateFunc("es")
 
 		tests := []struct {
-			translateFunc func(translateKey string, options *Options) string
+			translateFunc func(translateKey string, options ...Options) string
 			expected      string
 		}{
 			{enTranslateFunc, "Welcome"},
@@ -630,7 +630,7 @@ func TestTranslate(t *testing.T) {
 
 		for i, test := range tests {
 			t.Run(fmt.Sprintf("translate function creation test - %v", i), func(t *testing.T) {
-				got := test.translateFunc("welcome", nil)
+				got := test.translateFunc("welcome")
 				if got != test.expected {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}

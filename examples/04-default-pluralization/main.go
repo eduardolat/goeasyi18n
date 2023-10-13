@@ -8,7 +8,7 @@ import (
 
 func main() {
 	// 1. Create a new i18n instance
-	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{})
+	i18n := goeasyi18n.NewI18n()
 
 	// 2. Create your translations
 	// If something goes wrong, the default value is used
@@ -41,7 +41,7 @@ func main() {
 	// The Count field is a *int that contains a number which is used to
 	// select the correct pluralization key
 	oneEmail := 1 // Get this value from your database or wherever you want
-	oneEmailOptions := &goeasyi18n.Options{
+	oneEmailOptions := goeasyi18n.Options{
 		Count: &oneEmail,
 		Data: map[string]any{
 			"EmailQty": oneEmail,
@@ -49,7 +49,7 @@ func main() {
 	}
 
 	manyEmails := 5 // Get this value from your database or wherever you want
-	manyEmailsOptions := &goeasyi18n.Options{
+	manyEmailsOptions := goeasyi18n.Options{
 		Count: &manyEmails,
 		Data: map[string]any{
 			"EmailQty": manyEmails,

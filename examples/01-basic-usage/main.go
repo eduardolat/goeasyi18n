@@ -8,6 +8,8 @@ import (
 
 func main() {
 	// 1. Create a new i18n instance
+	// You can skip the goeasyi18n.Config{} entirely if you are
+	// ok with the default values.
 	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{
 		// You can set the fallback language (optional)
 		// The default value is "en"
@@ -38,10 +40,10 @@ func main() {
 	i18n.AddLanguage("es", esTranslations)
 
 	// 4. You are done! 🎉 Just get that translations!
-	t1 := i18n.Translate("en", "hello_message", &goeasyi18n.Options{})
+	t1 := i18n.Translate("en", "hello_message", goeasyi18n.Options{})
 	// Or you can use the T method (it's just an alias for Translate)
-	// and you can pass nil if you don't need options
-	t2 := i18n.T("es", "hello_message", nil)
+	// and you can skip the options if you don't need them
+	t2 := i18n.T("es", "hello_message")
 
 	fmt.Println(t1)
 	fmt.Println(t2)
@@ -71,8 +73,9 @@ func main() {
 	translateEn := i18n.NewLangTranslateFunc("en")
 	translateEs := i18n.NewLangTranslateFunc("es")
 
-	t3 := translateEn("hello_message", nil)
-	t4 := translateEs("hello_message", nil)
+	// You can skip the options if you don't need them
+	t3 := translateEn("hello_message", goeasyi18n.Options{})
+	t4 := translateEs("hello_message")
 
 	fmt.Println(t3)
 	fmt.Println(t4)

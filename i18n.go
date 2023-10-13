@@ -19,14 +19,21 @@ type Config struct {
 }
 
 // Create a new i18n object
-func NewI18n(config Config) *I18n {
+func NewI18n(config ...Config) *I18n {
+	var pickedConfig Config
+	if len(config) > 0 {
+		pickedConfig = config[0]
+	} else {
+		pickedConfig = Config{}
+	}
+
 	instance := I18n{
 		languages:          make(map[string]TranslateStrings),
 		pluralizationFuncs: make(map[string]PluralizationFunc),
 	}
 
-	if config.FallbackLanguageName != "" {
-		instance.fallbackLanguageName = config.FallbackLanguageName
+	if pickedConfig.FallbackLanguageName != "" {
+		instance.fallbackLanguageName = pickedConfig.FallbackLanguageName
 	} else {
 		instance.fallbackLanguageName = "en"
 	}
@@ -88,10 +95,17 @@ type Options struct {
 }
 
 // Translate a string using its key and the language name
-func (t *I18n) Translate(languageName string, translateKey string, options *Options) string {
-	// Initialize options if nil
-	if options == nil {
-		options = &Options{}
+func (t *I18n) Translate(
+	languageName string,
+	translateKey string,
+	options ...Options,
+) string {
+	// Initialize options if not provided
+	var pickedOptions Options
+	if len(options) > 0 {
+		pickedOptions = options[0]
+	} else {
+		pickedOptions = Options{}
 	}
 
 	// Get lang and fallback if not found
@@ -127,13 +141,13 @@ func (t *I18n) Translate(languageName string, translateKey string, options *Opti
 
 	// Get the string key to be used
 	mode := "Default" // Default - Pluralized - Gendered - PluralizedGendered
-	if options.Count != nil && options.Gender != nil {
+	if pickedOptions.Count != nil && pickedOptions.Gender != nil {
 		mode = "PluralizedGendered"
 	}
-	if mode == "Default" && options.Count != nil {
+	if mode == "Default" && pickedOptions.Count != nil {
 		mode = "Pluralized"
 	}
-	if mode == "Default" && options.Gender != nil {
+	if mode == "Default" && pickedOptions.Gender != nil {
 		mode = "Gendered"
 	}
 
@@ -141,10 +155,10 @@ func (t *I18n) Translate(languageName string, translateKey string, options *Opti
 	var pluralForm, genderForm string
 	if mode == "Pluralized" || mode == "PluralizedGendered" {
 		pluralizationFunc := t.pluralizationFuncs[languageName]
-		pluralForm = pluralizationFunc(*options.Count)
+		pluralForm = pluralizationFunc(*pickedOptions.Count)
 	}
 	if mode == "Gendered" || mode == "PluralizedGendered" {
-		genderForm = createGenderForm(*options.Gender)
+		genderForm = createGenderForm(*pickedOptions.Gender)
 	}
 
 	// Get the string key to be used
@@ -168,16 +182,20 @@ func (t *I18n) Translate(languageName string, translateKey string, options *Opti
 	}
 
 	// Execute the template
-	if options.Data != nil {
-		translation = ExecuteTemplate(translation, options.Data)
+	if pickedOptions.Data != nil {
+		translation = ExecuteTemplate(translation, pickedOptions.Data)
 	}
 
 	return translation
 }
 
 // T is a shortcut for Translate
-func (t *I18n) T(languageName string, translateKey string, options *Options) string {
-	return t.Translate(languageName, translateKey, options)
+func (t *I18n) T(
+	languageName string,
+	translateKey string,
+	options ...Options,
+) string {
+	return t.Translate(languageName, translateKey, options...)
 }
 
 /*
@@ -259,7 +277,7 @@ func (t *I18n) NewTemplatingTranslateFunc() func(args ...interface{}) string {
 			}
 		}
 
-		options := &Options{
+		options := Options{
 			Count:  count,
 			Gender: gender,
 			Data:   data,
@@ -271,8 +289,13 @@ func (t *I18n) NewTemplatingTranslateFunc() func(args ...interface{}) string {
 
 // NewLangTranslateFunc creates a function to translate a string in a specific language
 // without the need to pass the language name every time.
-func (t *I18n) NewLangTranslateFunc(languageName string) func(translateKey string, options *Options) string {
-	return func(translateKey string, options *Options) string {
-		return t.Translate(languageName, translateKey, options)
+func (t *I18n) NewLangTranslateFunc(
+	languageName string,
+) func(
+	translateKey string,
+	options ...Options,
+) string {
+	return func(translateKey string, options ...Options) string {
+		return t.Translate(languageName, translateKey, options...)
 	}
 }

@@ -8,7 +8,7 @@ import (
 
 func main() {
 	// 1. Create a new i18n instance
-	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{})
+	i18n := goeasyi18n.NewI18n()
 
 	// 2. Load your translations from JSON or YAML files
 	// You can load one or more files like goeasyi18n.LoadFromJson("./en/t1.json", "./en/t2.json")
@@ -32,8 +32,8 @@ func main() {
 	i18n.AddLanguage("es", esTranslations)
 
 	// 4. Crete the options for the translations with/without interpolations
-	options := &goeasyi18n.Options{}
-	optionsWithName := &goeasyi18n.Options{
+	options := goeasyi18n.Options{}
+	optionsWithName := goeasyi18n.Options{
 		Data: map[string]string{
 			"Name": "John Doe",
 		},
