@@ -2,4 +2,4 @@ version: '3'
 
 tasks:
   test:
-    cmd: go test ./...
+    cmd: go test .
