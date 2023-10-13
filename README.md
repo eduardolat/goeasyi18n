@@ -12,6 +12,12 @@
 
 # Go Easy i18n
 
+<center>
+	<img src="./assets/i18n-gopher.png" alt="Go Easy i18n" style="height: 200px;"/>
+</center>
+
+<br/>
+
 Effortlessly simple i18n for Go. Plurals, gender, and more made easy!
 
 - 🚀 Making Internationalization a Breeze in Go!
@@ -40,6 +46,8 @@ import (
 
 func main() {
 	// 1. Create a new i18n instance
+	// You can skip the goeasyi18n.Config{} entirely if you are
+	// ok with the default values.
 	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{
 		FallbackLanguageName: "en", // It's optional, the default value is "en"
 	})
@@ -61,7 +69,7 @@ func main() {
 
 	// 3. You are done! 🎉 Just get that translations!
 	t1 := i18n.Translate("en", "hello_message", goeasyi18n.Options{})
-	t2 := i18n.Translate("es", "hello_message", nil) // Can be nil if you don't need options
+	t2 := i18n.Translate("es", "hello_message") // You can skip the options if you don't need them
 
 	fmt.Println(t1)
 	fmt.Println(t2)
