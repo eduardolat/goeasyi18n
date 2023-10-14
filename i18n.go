@@ -169,9 +169,7 @@ func (t *I18n) AddLanguage(
 		isConsistent, errors := t.CheckLanguageConsistency(languageName)
 		if isConsistent == false {
 			errorMsg := strings.Join(errors, "\n")
-			fmt.Println()
 			fmt.Println(errorMsg)
-			fmt.Println()
 		}
 		return errors
 	}
