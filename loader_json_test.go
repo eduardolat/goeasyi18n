@@ -1,32 +1,40 @@
 package goeasyi18n
 
 import (
-	"os"
-	"path/filepath"
+	"embed"
 	"testing"
 )
 
-func TestLoadFromJson(t *testing.T) {
-	// Create a temp directory for testing
-	tempDir := filepath.Join(os.TempDir(), "goeasyi18n_tests_loader_json")
-	os.RemoveAll(tempDir)
-	err := os.MkdirAll(tempDir, 0755)
+func TestLoadFromJsonBytes(t *testing.T) {
+	bytes := []byte(`[{"Key": "hello", "Default": "Hello"}]`)
+	strings, err := LoadFromJsonBytes(bytes)
 	if err != nil {
-		t.Errorf("Unexpected error creating temp dir for the tests: %v", err)
+		t.Errorf("Unexpected error: %v", err)
 	}
-
-	// Helper function to build paths
-	buildPath := func(fileName string) string {
-		return filepath.Join(tempDir, fileName)
+	if len(strings) != 1 || strings[0].Key != "hello" {
+		t.Errorf("Unexpected result: %v", strings)
 	}
+	if strings[0].Default != "Hello" {
+		t.Errorf("Unexpected result: %v", strings)
+	}
+}
 
-	// Prepare test files
-	os.WriteFile(buildPath("test1.json"), []byte(`[{"Key": "hello", "Default": "Hello"}]`), 0755)
-	os.WriteFile(buildPath("test2.json"), []byte(`[{"Key": "world", "Default": "World"}]`), 0755)
-	os.WriteFile(buildPath("bad.json"), []byte(`bad json`), 0755)
+func TestLoadFromJsonString(t *testing.T) {
+	strings, err := LoadFromJsonString(`[{"Key": "hello", "Default": "Hello"}]`)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	if len(strings) != 1 || strings[0].Key != "hello" {
+		t.Errorf("Unexpected result: %v", strings)
+	}
+	if strings[0].Default != "Hello" {
+		t.Errorf("Unexpected result: %v", strings)
+	}
+}
 
+func TestLoadFromJsonFiles(t *testing.T) {
 	t.Run("load single file", func(t *testing.T) {
-		strings, err := LoadFromJson(buildPath("test1.json"))
+		strings, err := LoadFromJsonFiles("./testfiles/test1.json")
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
@@ -39,7 +47,10 @@ func TestLoadFromJson(t *testing.T) {
 	})
 
 	t.Run("load multiple files", func(t *testing.T) {
-		strings, err := LoadFromJson(buildPath("test1.json"), buildPath("test2.json"))
+		strings, err := LoadFromJsonFiles(
+			"./testfiles/test1.json",
+			"./testfiles/test2.json",
+		)
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
@@ -55,7 +66,7 @@ func TestLoadFromJson(t *testing.T) {
 	})
 
 	t.Run("load with glob pattern", func(t *testing.T) {
-		strings, err := LoadFromJson(buildPath("test*.json"))
+		strings, err := LoadFromJsonFiles("./testfiles/test*.json")
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
@@ -64,33 +75,91 @@ func TestLoadFromJson(t *testing.T) {
 		}
 	})
 
-	t.Run("handle bad json", func(t *testing.T) {
-		_, err := LoadFromJson(buildPath("bad.json"))
+	t.Run("handle incorrect json", func(t *testing.T) {
+		_, err := LoadFromJsonFiles("./testfiles/incorrect.json")
 		if err == nil {
 			t.Errorf("Expected error, got nil")
 		}
 	})
 
 	t.Run("handle no match glob", func(t *testing.T) {
-		_, err := LoadFromJson(buildPath("nomatch*.json"))
+		_, err := LoadFromJsonFiles("./testfiles/nomatch*.json")
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
 	})
+}
 
-	t.Run("run translation on parsed strings", func(t *testing.T) {
-		i18n := NewI18n(Config{})
-		english, err := LoadFromJson(buildPath("test1.json"))
+//go:embed testfiles/*
+var jsonTestFiles embed.FS
+
+func TestLoadFromJsonFS(t *testing.T) {
+	t.Run("load single file", func(t *testing.T) {
+		strings, err := LoadFromJsonFS(
+			jsonTestFiles,
+			"testfiles/test1.json",
+		)
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
-		i18n.AddLanguage("en", english)
+		if len(strings) != 1 || strings[0].Key != "hello" {
+			t.Errorf("Unexpected result: %v", strings)
+		}
+		if strings[0].Default != "Hello" {
+			t.Errorf("Unexpected result: %v", strings)
+		}
+	})
 
-		result := i18n.Translate("en", "hello")
-		expected := "Hello"
+	t.Run("load multiple files", func(t *testing.T) {
+		strings, err := LoadFromJsonFS(
+			jsonTestFiles,
+			"testfiles/test1.json",
+			"testfiles/test2.json",
+		)
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+		if len(strings) != 2 {
+			t.Errorf("Unexpected result: %v", strings)
+		}
+		if strings[0].Key != "hello" {
+			t.Errorf("Unexpected result: %v", strings)
+		}
+		if strings[1].Key != "world" {
+			t.Errorf("Unexpected result: %v", strings)
+		}
+	})
 
-		if result != expected {
-			t.Errorf("Unexpected result: %v", result)
+	t.Run("load with glob pattern", func(t *testing.T) {
+		strings, err := LoadFromJsonFS(
+			jsonTestFiles,
+			"testfiles/test*.json",
+		)
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+		if len(strings) != 2 {
+			t.Errorf("Unexpected result: %v", strings)
+		}
+	})
+
+	t.Run("handle incorrect json", func(t *testing.T) {
+		_, err := LoadFromJsonFS(
+			jsonTestFiles,
+			"testfiles/incorrect.json",
+		)
+		if err == nil {
+			t.Errorf("Expected error, got nil")
+		}
+	})
+
+	t.Run("handle no match glob", func(t *testing.T) {
+		_, err := LoadFromJsonFS(
+			jsonTestFiles,
+			"testfiles/nomatch*.json",
+		)
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
 		}
 	})
 }
