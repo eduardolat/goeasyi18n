@@ -12,9 +12,7 @@
 
 # Go Easy i18n
 
-<center>
-	<img src="./assets/i18n-gopher.png" alt="Go Easy i18n" style="height: 200px;"/>
-</center>
+<img src="./assets/i18n-gopher.png" alt="Go Easy i18n" style="height: 200px;"/>
 
 <br/>
 
