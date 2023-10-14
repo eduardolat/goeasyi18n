@@ -51,6 +51,7 @@ func main() {
 	})
 
 	// 2. Add languages and its translations (can be loaded from a JSON/YAML file)
+	// using bytes, strings, files or fs.FS (embed.FS)
 	i18n.AddLanguage("en", goeasyi18n.TranslateStrings{
 		{
 			Key:     "hello_message",
@@ -90,7 +91,7 @@ Combining these features you can go as simple or complex as you want.
 
 - [Basic Usage](/examples/01-basic-usage/main.go)
 - [Variable Interpolation](/examples/02-variable-interpolation/main.go)
-- [Load translations from JSON/YAML](/examples/03-json-yaml-loaders/main.go)
+- [Load translations from JSON/YAML](/examples/03-json-yaml-loaders/README.md)
 - [Default Pluralization](/examples/04-default-pluralization/main.go)
 - [Custom Pluralization](/examples/05-custom-pluralization/main.go)
 - [Genders](/examples/06-genders/main.go)

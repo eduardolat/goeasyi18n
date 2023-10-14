@@ -1,0 +1,5 @@
+- Key: hello_world
+  Default: Hola Mundo desde embed
+
+- Key: hello_user
+  Default: Hola {{.Name}} desde embed

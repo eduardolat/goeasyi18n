@@ -1,0 +1,6 @@
+[
+  {
+    "Key": "hello_admin",
+    "Default": "Hello {{.Name}}, you are an admin, from embed"
+  }
+]

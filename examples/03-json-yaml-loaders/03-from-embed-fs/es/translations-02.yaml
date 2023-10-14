@@ -1,0 +1,2 @@
+- Key: hello_admin
+  Default: Hola {{.Name}}, eres un administrador, desde embed

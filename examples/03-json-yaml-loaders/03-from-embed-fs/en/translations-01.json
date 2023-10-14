@@ -1,0 +1,10 @@
+[
+  {
+    "Key": "hello_world",
+    "Default": "Hello World from embed"
+  },
+  {
+    "Key": "hello_user",
+    "Default": "Hello {{.Name}} from embed"
+  }
+]

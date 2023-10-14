@@ -11,18 +11,18 @@ func main() {
 	i18n := goeasyi18n.NewI18n()
 
 	// 2. Load your translations from JSON or YAML files
-	// You can load one or more files like goeasyi18n.LoadFromJson("./en/t1.json", "./en/t2.json")
-	// You can use glob patterns like goeasyi18n.LoadFromJson("./en/*.json")
+	// You can load one or more files like goeasyi18n.LoadFromJsonFiles("./en/t1.json", "./en/t2.json")
+	// You can use glob patterns like goeasyi18n.LoadFromJsonFiles("./en/*.json")
 	// All the translation files get merged
 
 	// Load english translations from JSON files
-	enTranslations, err := goeasyi18n.LoadFromJson("./en/*.json")
+	enTranslations, err := goeasyi18n.LoadFromJsonFiles("./en/*.json")
 	if err != nil {
 		panic(err)
 	}
 
 	// Load spanish translations from YAML files
-	esTranslations, err := goeasyi18n.LoadFromYaml("./es/*.yaml")
+	esTranslations, err := goeasyi18n.LoadFromYamlFiles("./es/*.yaml")
 	if err != nil {
 		panic(err)
 	}
