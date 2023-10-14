@@ -14,6 +14,12 @@ func main() {
 		// You can set the fallback language (optional)
 		// The default value is "en"
 		FallbackLanguageName: "en",
+
+		// You can disable the consistency check (optional)
+		// By default, if you add a translation for a language
+		// that has not the same keys as the other languages,
+		// the i18n instance will log warnings.
+		DisableConsistencyCheck: false,
 	})
 
 	// 2. Create your translations
@@ -37,7 +43,15 @@ func main() {
 	// You you can use the full language name like "english" or "spanish"
 	// You can even use the IETF Language Tag like "en-US" or "es-ES"
 	i18n.AddLanguage("en", enTranslations)
-	i18n.AddLanguage("es", esTranslations)
+
+	// If the language has the same keys as the other languages,
+	// the i18n instance will log warnings and return a slice of
+	// inconsistencies as strings. You can disable this behavior
+	// in the i18n instance config.
+	inconsistencies := i18n.AddLanguage("es", esTranslations)
+	fmt.Printf("Inconsistencies: %v\n", inconsistencies)
+	// (no inconsistencies)
+	// Prints: Inconsistencies: []
 
 	// 4. You are done! 🎉 Just get that translations!
 	t1 := i18n.Translate("en", "hello_message", goeasyi18n.Options{})

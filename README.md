@@ -48,6 +48,7 @@ func main() {
 	// ok with the default values.
 	i18n := goeasyi18n.NewI18n(goeasyi18n.Config{
 		FallbackLanguageName: "en", // It's optional, the default value is "en"
+		DisableConsistencyCheck: false, // It's optional, the default value is false
 	})
 
 	// 2. Add languages and its translations (can be loaded from a JSON/YAML file)
