@@ -104,6 +104,10 @@ You are done! 🎉🎉🎉
 
 If you find this library useful, please 🙏 give it a star ⭐️ on [GitHub](https://github.com/eduardolat/goeasyi18n) and share it with your friends.
 
+## Want to Contribute? 🌟
+
+We're thrilled you're considering contributing to Go Easy i18n! Your help is invaluable. Whether it's through code improvements, bug fixes, or enhancing documentation, every contribution counts. If you're unsure where to start or have any questions, feel free to open an issue. For detailed guidelines on making contributions, please read our [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
 ## FAQ ❓
 
 ### Why should I use this library?
