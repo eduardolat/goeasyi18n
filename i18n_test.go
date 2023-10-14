@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"strings"
 	"testing"
 )
 
@@ -635,6 +636,87 @@ func TestTranslate(t *testing.T) {
 					t.Errorf("expected %s; got %s", test.expected, got)
 				}
 			})
+		}
+	})
+
+	t.Run("test inconcistencies at the moment of adding a new language", func(t *testing.T) {
+		i18n := NewI18n()
+
+		errors := i18n.AddLanguage("en", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Welcome",
+			},
+			TranslateString{
+				Key:     "english_only_key",
+				Default: "English only key",
+			},
+		})
+
+		if len(errors) != 0 {
+			t.Errorf("expected no errors; got %v", errors)
+		}
+
+		errors = i18n.AddLanguage("es", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Bienvenido",
+			},
+			TranslateString{
+				Key:     "spanish_only_key",
+				Default: "Key solo de español",
+			},
+		})
+
+		if len(errors) != 2 {
+			t.Errorf("expected 2 errors; got %v", errors)
+		}
+
+		firstError := errors[0]
+		secondError := errors[1]
+
+		if strings.Contains(firstError, "spanish_only_key") == false {
+			t.Errorf("expected error to contain spanish_only_key; got %v", firstError)
+		}
+
+		if strings.Contains(secondError, "english_only_key") == false {
+			t.Errorf("expected error to contain english_only_key; got %v", secondError)
+		}
+	})
+
+	t.Run("test inconcistencies can be disabled", func(t *testing.T) {
+		i18n := NewI18n(Config{
+			DisableConsistencyCheck: true,
+		})
+
+		errors := i18n.AddLanguage("en", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Welcome",
+			},
+			TranslateString{
+				Key:     "english_only_key",
+				Default: "English only key",
+			},
+		})
+
+		if len(errors) != 0 {
+			t.Errorf("expected no errors; got %v", errors)
+		}
+
+		errors = i18n.AddLanguage("es", TranslateStrings{
+			TranslateString{
+				Key:     "welcome",
+				Default: "Bienvenido",
+			},
+			TranslateString{
+				Key:     "spanish_only_key",
+				Default: "Key solo de español",
+			},
+		})
+
+		if len(errors) != 0 {
+			t.Errorf("expected 0 errors; got %v", errors)
 		}
 	})
 }

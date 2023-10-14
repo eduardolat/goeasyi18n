@@ -1,24 +1,28 @@
 package goeasyi18n
 
 import (
+	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
 )
 
 type I18n struct {
-	languages            map[string]TranslateStrings
-	pluralizationFuncs   map[string]PluralizationFunc
-	fallbackLanguageName string
+	languages               map[string]TranslateStrings
+	pluralizationFuncs      map[string]PluralizationFunc
+	fallbackLanguageName    string
+	disableConsistencyCheck bool
 }
 
-// Config for the i18n object
+// Config is used to configure the i18n object
 type Config struct {
 	// Default: "en"
 	FallbackLanguageName string
+	// Default: false
+	DisableConsistencyCheck bool
 }
 
-// Create a new i18n object
+// NewI18n creates and returns a new i18n object
 func NewI18n(config ...Config) *I18n {
 	var pickedConfig Config
 	if len(config) > 0 {
@@ -28,8 +32,9 @@ func NewI18n(config ...Config) *I18n {
 	}
 
 	instance := I18n{
-		languages:          make(map[string]TranslateStrings),
-		pluralizationFuncs: make(map[string]PluralizationFunc),
+		languages:               make(map[string]TranslateStrings),
+		pluralizationFuncs:      make(map[string]PluralizationFunc),
+		disableConsistencyCheck: pickedConfig.DisableConsistencyCheck,
 	}
 
 	if pickedConfig.FallbackLanguageName != "" {
@@ -41,7 +46,8 @@ func NewI18n(config ...Config) *I18n {
 	return &instance
 }
 
-// Default pluralization function that is used if no pluralization function is set for the language
+// DefaultPluralizationFunc is the function that is used if no
+// custom pluralization function is set for the language
 func DefaultPluralizationFunc(count int) string {
 	if count == 1 {
 		return "One"
@@ -49,7 +55,8 @@ func DefaultPluralizationFunc(count int) string {
 	return "Many"
 }
 
-// Function to determinate the gender and sanitize it
+// createGenderForm function to determinate the gender
+// and sanitize it
 func createGenderForm(input string) string {
 
 	input = strings.ToLower(input)
@@ -66,35 +73,132 @@ func createGenderForm(input string) string {
 		return "NonBinary"
 	}
 
+	// If the gender is not valid, return empty string
+	// it causes the use of the Default form of the
+	// translation
 	return ""
 
 }
 
-// Add a language to the i18n object with its translations
-func (t *I18n) AddLanguage(languageName string, translateStrings TranslateStrings) {
-	t.languages[languageName] = translateStrings
-	t.SetPluralizationFunc(languageName, DefaultPluralizationFunc)
+// CheckLanguageConsistency checks if a language is consistent
+// with the other languages, it checks if the translations keys
+// are the same in all languages
+func (t *I18n) CheckLanguageConsistency(
+	langNameToCheck string,
+) (bool, []string) {
+	langToCheck, exists := t.languages[langNameToCheck]
+	if !exists {
+		return false, []string{
+			"goeasyi18n: the language '" + langNameToCheck + "' doesn't exist",
+		}
+	}
+
+	inconsistencies := []string{}
+
+	for langName, lang := range t.languages {
+		if langName == langNameToCheck {
+			continue
+		}
+
+		// Check if the new language has more keys
+		// than existing languages
+		for _, translateStringToCheck := range langToCheck {
+			found := false
+			for _, translateString := range lang {
+				if translateString.Key == translateStringToCheck.Key {
+					found = true
+					break
+				}
+			}
+			if !found {
+				inconsistencies = append(
+					inconsistencies,
+					fmt.Sprintf(
+						"goeasyi18n: the language '%s' has the key '%s' that doesn't exist in '%s'",
+						langNameToCheck,
+						translateStringToCheck.Key,
+						langName,
+					),
+				)
+			}
+		}
+
+		// Check if the new language has less keys
+		// than existing languages
+		for _, translateString := range lang {
+			found := false
+			for _, translateStringToCheck := range langToCheck {
+				if translateString.Key == translateStringToCheck.Key {
+					found = true
+					break
+				}
+			}
+			if !found {
+				inconsistencies = append(
+					inconsistencies,
+					fmt.Sprintf(
+						"goeasyi18n: the language '%s' has the key '%s' that doesn't exist in '%s'",
+						langName,
+						translateString.Key,
+						langNameToCheck,
+					),
+				)
+			}
+		}
+	}
+
+	isConsistent := len(inconsistencies) == 0
+	return isConsistent, inconsistencies
 }
 
-// Check if a language is available (if is loaded)
+// AddLanguage adds a language to the i18n object with its translations
+// and after that it check if the language is consistent with
+// the other languages (can be disabled with the config)
+//
+// It returns a slice of errors as strings if the language is
+// not consistent with the other languages and the consistency
+// check is enabled
+func (t *I18n) AddLanguage(
+	languageName string,
+	translateStrings TranslateStrings,
+) []string {
+	t.languages[languageName] = translateStrings
+	t.SetPluralizationFunc(languageName, DefaultPluralizationFunc)
+
+	if t.disableConsistencyCheck == false {
+		isConsistent, errors := t.CheckLanguageConsistency(languageName)
+		if isConsistent == false {
+			errorMsg := strings.Join(errors, "\n")
+			fmt.Println()
+			fmt.Println(errorMsg)
+			fmt.Println()
+		}
+		return errors
+	}
+
+	return nil
+}
+
+// HasLanguage checks if a language is available (if is loaded)
 func (t *I18n) HasLanguage(languageName string) bool {
 	_, ok := t.languages[languageName]
 	return ok
 }
 
-// Set the pluralization function for a language
+// SetPluralizationFunc sets the pluralization function for a language
 func (t *I18n) SetPluralizationFunc(languageName string, fn PluralizationFunc) {
 	t.pluralizationFuncs[languageName] = fn
 }
 
-// Translate Options: Additional options for the Translate function
+// Options are the additional options for the Translate function
 type Options struct {
 	Data   any
 	Count  *int
 	Gender *string // male, female, nonbinary, non-binary (case insensitive)
 }
 
-// Translate a string using its key and the language name
+// Translate translates a string in a specific language using a key
+// and additional optional options
 func (t *I18n) Translate(
 	languageName string,
 	translateKey string,
@@ -198,49 +302,53 @@ func (t *I18n) T(
 	return t.Translate(languageName, translateKey, options...)
 }
 
-/*
-NewTemplatingTranslateFunc creates a function that can be used in text/template and html/template.
-Just pass the created function to template.FuncMap.
-
-Example:
-
-tempTemplate := template.New("main").Funcs(
-
-	template.FuncMap{
-		// 👇 "Translate" could be just "T" (for simplicity) or any other name you want.
-		"Translate": i18n.NewTemplatingTranslateFunc(),
-	},
-
-)
-
-Then you can use it in your template like this:
-
-{{Translate "lang" "en" "key" "hello_emails" "gender" "nonbinary" "count" "100" "SomeData" "Anything"}}
-
-The format is key-value based and the order doesn't matter.
-This is the format:
-
-{{Translate "key1" "value1" "key2" "value2" ...}}
-
-Arguments:
-
-- "lang" "en": Language code (e.g., "en", "es").
-- "key" "hello_emails": Translation key.
-- "gender" "nonbinary": Gender for the translation (optional).
-- "count" "100": Count for pluralization (optional).
-- Additional key-value pairs will be added to the Data map.
-
-Arguments are passed in pairs. The first item in each pair is the key, and the second is the value.
-
-Key-Value Explanation:
-- Each argument is processed as a pair: the first string is considered the key and the second string is the value.
-- For example, in "lang" "en", "lang" is the key and "en" is the value.
-
-As you can imagine, "lang", "key", "gender", and "count" are reserved keys.
-You can use any other key you want to pass data to translation.
-
-Note: All arguments are strings. The function will attempt to convert "count" to an integer.
-*/
+// NewTemplatingTranslateFunc creates a function that can be used in text/template and html/template.
+// Just pass the created function to template.FuncMap.
+//
+// Example:
+//
+//	tempTemplate := template.New("main").Funcs(
+//
+//		template.FuncMap{
+//			// 👇 "Translate" could be just "T" (for simplicity) or any other name you want.
+//			"Translate": i18n.NewTemplatingTranslateFunc(),
+//		},
+//
+//	)
+//
+// Then you can use it in your template like this:
+//
+//	{{ Translate "lang" "en" "key" "hello_emails" "gender" "nonbinary" "count" "100" "SomeData" "Anything" }}
+//
+// The format is key-value based and the order doesn't matter.
+// This is the format:
+//
+//	{{ Translate "key1" "value1" "key2" "value2" ... }}
+//
+// Arguments:
+//
+// - "lang" "en": Language code (e.g., "en", "es").
+//
+// - "key" "hello_emails": Translation key.
+//
+// - "gender" "nonbinary": Gender for the translation (optional).
+//
+// - "count" "100": Count for pluralization (optional).
+//
+// - Additional key-value pairs will be added to the Data map.
+//
+// Arguments are passed in pairs. The first item in each pair is the key, and the second is the value.
+//
+// Key-Value Explanation:
+//
+// - Each argument is processed as a pair: the first string is considered the key and the second string is the value.
+//
+// - For example, in "lang" "en", "lang" is the key and "en" is the value.
+//
+// As you can imagine, "lang", "key", "gender", and "count" are reserved keys.
+// You can use any other key you want to pass data to translation.
+//
+// Note: All arguments are strings. The function will attempt to convert "count" to an integer.
 func (t *I18n) NewTemplatingTranslateFunc() func(args ...interface{}) string {
 	return func(args ...interface{}) string {
 		var lang, key string
