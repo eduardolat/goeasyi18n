@@ -1,6 +1,6 @@
 <p align="center">
 	<a href="https://github.com/eduardolat/goeasyi18n/actions" target="_blank" rel="noopener">
-		<img src="https://github.com/eduardolat/goeasyi18n/actions/workflows/test.yml/badge.svg" alt="Tests status" />
+		<img src="https://github.com/eduardolat/goeasyi18n/actions/workflows/tests.yml/badge.svg" alt="Tests status" />
 	</a>
 	<a href="https://github.com/eduardolat/goeasyi18n/releases" target="_blank" rel="noopener">
 		<img src="https://img.shields.io/github/release/eduardolat/goeasyi18n.svg" alt="Latest releases" />
